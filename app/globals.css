@@ -1,0 +1,170 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+  --accent-purple: #4035DA;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+.theme-shadow {
+  -webkit-box-shadow: 10px 10px 0px 0px var(--accent-purple);
+  -moz-box-shadow: 10px 10px 0px 0px var(--accent-purple);
+  box-shadow: 10px 10px 0px 0px var(--accent-purple);
+}
+
+.theme-shadow-sm {
+  -webkit-box-shadow: 4px 4px 0px 0px var(--accent-purple);
+  -moz-box-shadow: 4px 4px 0px 0px var(--accent-purple);
+  box-shadow: 4px 4px 0px 0px var(--accent-purple);
+}
+
+.work-sans {
+  font-family: var(--font-work-sans);
+}
+
+.work-sans-300 {
+  font-family: var(--font-work-sans);
+  font-weight: 300 !important;
+}
+
+.work-sans-400 {
+  font-family: var(--font-work-sans);
+  font-weight: 400 !important;
+}
+
+.work-sans-500 {
+  font-family: var(--font-work-sans);
+  font-weight: 500 !important;
+}
+
+.work-sans-600 {
+  font-family: var(--font-work-sans);
+  font-weight: 600 !important;
+}
+
+.work-sans-700 {
+  font-family: var(--font-work-sans);
+  font-weight: 700 !important;
+}
+
+.work-sans-800 {
+  font-family: var(--font-work-sans);
+  font-weight: 800 !important;
+}
+
+.inter-300 {
+  font-family: var(--font-inter);
+  font-weight: 300 !important;
+}
+
+.inter-400 {
+  font-family: var(--font-inter);
+  font-weight: 400 !important;
+}
+
+.inter-500 {
+  font-family: var(--font-inter);
+  font-weight: 500 !important;
+}
+
+.inter-600 {
+  font-family: var(--font-inter);
+  font-weight: 600 !important;
+}
+
+.inter-700 {
+  font-family: var(--font-inter);
+  font-weight: 700 !important;
+}
+
+.inter-800 {
+  font-family: var(--font-inter);
+  font-weight: 800 !important;
+}
+
+.montserrat-300 {
+  font-family: var(--font-montserrat);
+  font-weight: 300 !important;
+}
+
+.montserrat-400 {
+  font-family: var(--font-montserrat);
+  font-weight: 400 !important;
+}
+
+.montserrat-500 {
+  font-family: var(--font-montserrat);
+  font-weight: 500 !important;
+}
+
+.montserrat-600 {
+  font-family: var(--font-montserrat);
+  font-weight: 600 !important;
+}
+
+.montserrat-700 {
+  font-family: var(--font-montserrat);
+  font-weight: 700 !important;
+}
+
+.montserrat-800 {
+  font-family: var(--font-montserrat);
+  font-weight: 800 !important;
+}
+
+.creme-pastry-300 {
+  font-family: var(--font-creme-pastry);
+  font-weight: 300 !important;
+}
+
+.creme-pastry-400 {
+  font-family: var(--font-creme-pastry);
+  font-weight: 400 !important;
+}
+
+.creme-pastry-500 {
+  font-family: var(--font-creme-pastry);
+  font-weight: 500 !important;
+}
+
+.creme-pastry-600 {
+  font-family: var(--font-creme-pastry);
+  font-weight: 600 !important;
+}
+
+.creme-pastry-700 {
+  font-family: var(--font-creme-pastry);
+  font-weight: 700 !important;
+}
+
+.montserrat-800 {
+  font-family: var(--font-montserrat);
+  font-weight: 800 !important;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  color: rgba(0, 0, 0, 0);
+  opacity: 1;
+  display: block;
+  background: url("/Icons/Calender.svg") no-repeat;
+  width: 15px;
+  height: 15px;
+  border-width: thin;
+}
