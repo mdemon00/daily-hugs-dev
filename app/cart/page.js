@@ -111,7 +111,7 @@ const Cart = () => {
                       <Image src={"/Icons/Delete.svg"} height={16} width={16} />
                     </button>
                   </div>
-                  <div className="flex justify-between mt-2 w-full hidden">
+                  <div className="flex justify-between mt-2 w-full">
                     <div>
                       <div className="text-12 work-sans-600">QUANTITY:</div>
                       <div className="flex items-center space-x-1 text-14">
@@ -152,6 +152,18 @@ const Cart = () => {
             </div>
           );
         })}
+      </div>
+
+      <div className="flex justify-between p-2 mx-6">
+        <span>Total</span>
+        <span>
+          <div className="text-16 work-sans-600">
+            €{" "}
+            {updatedCartProducts?.reduce((acc, el) => {
+              return acc + Number(el.discountedPrice * el.numOfBoxes);
+            }, 0)}
+          </div>
+        </span>
       </div>
 
       <div className="mx-6 my-6">
