@@ -30,7 +30,7 @@ const Navbar = () => {
           fill={"true"}
           className="fixed top-[34px] w-screen left-0 right-0 mx-auto lg:mx-0 h-fit z-[150] hidden lg:block"
           alt="Next.js Logo"
-          priority
+          priority={"true"}
         />
 
         {
