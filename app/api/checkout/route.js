@@ -64,14 +64,14 @@ export const POST = async (request) => {
       stripeItems.push({
         price: stripeProduct?.default_price,
         quantity: product?.numOfBoxes,
-        tax_rates: ["txr_1OJZpcHggI5oWQYn9wAH6Zx6"],
+        tax_rates: ["txr_1OJccpHggI5oWQYnDatdH21s"],
       });
     }
   }
 
   // Create a new checkout session with the selected items
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card", "ideal"],
+    payment_method_types: ["ideal", "card"],
     line_items: stripeItems,
     mode: "payment",
     success_url: "http://localhost:3000/success",

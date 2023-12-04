@@ -99,8 +99,8 @@ const Cart = () => {
 
   const calculateTotal = () => {
     const subtotal = calculateSubtotal();
-    const taxes = calculateTaxes();
-    return subtotal + taxes;
+    //const taxes = calculateTaxes();
+    return subtotal;
   };
 
   return (
