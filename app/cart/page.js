@@ -9,7 +9,7 @@ export const cartProducts = [
   {
     image: "/RomanceDose/Dose_1.png",
     id: "234rwed2343ew",
-    title: "DailyHugs 2 Boxes",
+    title: "DailyHugs Standard",
     originalPrice: 3455,
     discountedPrice: 3000,
     numOfBoxes: 1,
@@ -17,7 +17,7 @@ export const cartProducts = [
   {
     image: "/RomanceDose/Dose_2.png",
     id: "sdvwer23few",
-    title: "DailyHugs 2 Boxes",
+    title: "DailyHugs Premium",
     originalPrice: 4555,
     discountedPrice: 2000,
     numOfBoxes: 1,
@@ -63,8 +63,44 @@ const Cart = () => {
     setUpdatedCartProducts((prev) => newCartProducts);
   };
 
-  const handleNextStep = () => {
-    router.push("/shipping-details");
+  const handleNextStep = async () => {
+    // router.push("/shipping-details");
+    await fetch("http://localhost:3000/api/checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ products: updatedCartProducts }),
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.url) {
+          window.location.href = response.url;
+          // console.log(response.url);
+        }
+      });
+  };
+
+  const calculateSubtotal = () => {
+    return updatedCartProducts.reduce(
+      (acc, el) => acc + Number(el.discountedPrice * el.numOfBoxes),
+      0
+    );
+  };
+
+  const calculateTaxes = () => {
+    const subtotal = calculateSubtotal();
+    const taxRate = 0.09; // 9% tax rate (you can customize this)
+    return subtotal * taxRate;
+  };
+
+  const calculateTotal = () => {
+    const subtotal = calculateSubtotal();
+    const taxes = calculateTaxes();
+    return subtotal + taxes;
   };
 
   return (
@@ -154,14 +190,40 @@ const Cart = () => {
         })}
       </div>
 
+      {/* Subtotal */}
+      <div className="flex justify-between p-2 mx-6">
+        <span>Subtotal</span>
+        <span>
+          <div className="text-16 work-sans-600">
+            € {calculateSubtotal().toFixed(2)}
+          </div>
+        </span>
+      </div>
+
+      {/* Shipping */}
+      <div className="flex justify-between p-2 mx-6">
+        <span>Shipping</span>
+        <span>
+          <div className="text-16 work-sans-600">FREE</div>
+        </span>
+      </div>
+
+      {/* Taxes */}
+      <div className="flex justify-between p-2 mx-6">
+        <span>Estimated Taxes (9%)</span>
+        <span>
+          <div className="text-16 work-sans-600">
+            € {calculateTaxes().toFixed(2)}
+          </div>
+        </span>
+      </div>
+
+      {/* Total */}
       <div className="flex justify-between p-2 mx-6">
         <span>Total</span>
         <span>
           <div className="text-16 work-sans-600">
-            €{" "}
-            {updatedCartProducts?.reduce((acc, el) => {
-              return acc + Number(el.discountedPrice * el.numOfBoxes);
-            }, 0)}
+            € {calculateTotal().toFixed(2)}
           </div>
         </span>
       </div>
