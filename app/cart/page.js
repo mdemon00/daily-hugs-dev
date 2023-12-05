@@ -32,6 +32,9 @@ const Cart = () => {
     removeFromCart,
     incrementQuantity,
     decrementQuantity,
+    calculateTotal,
+    calculateTaxes,
+    calculateSubtotal,
   } = useCart();
 
   const handleAddToCart = () => {
@@ -59,7 +62,6 @@ const Cart = () => {
     decrementQuantity(productId);
   };
 
-  const [updatedCartProducts, setUpdatedCartProducts] = useState(cartProducts);
   const router = useRouter();
 
   const handleClose = () => {
@@ -67,44 +69,26 @@ const Cart = () => {
   };
 
   const handleNextStep = async () => {
+    handleAddToCart();
     // router.push("/shipping-details");
-    router.push("/shipping-details");
-    await fetch("http://localhost:3000/api/checkout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ products: updatedCartProducts }),
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.url) {
-          window.location.href = response.url;
-          // console.log(response.url);
-        }
-      });
-  };
-
-  const calculateSubtotal = () => {
-    return cart.reduce(
-      (acc, el) => acc + Number(el.discountedPrice * el.numOfBoxes),
-      0
-    );
-  };
-
-  const calculateTaxes = () => {
-    const subtotal = calculateSubtotal();
-    const taxRate = 0.09; // 9% tax rate (you can customize this)
-    return subtotal * taxRate;
-  };
-
-  const calculateTotal = () => {
-    const subtotal = calculateSubtotal();
-    //const taxes = calculateTaxes();
-    return subtotal;
+    // router.push("/shipping-details");
+    // await fetch("http://localhost:3000/api/checkout", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ products: updatedCartProducts }),
+    // })
+    //   .then((response) => {
+    //     return response.json();
+    //   })
+    //   .then((response) => {
+    //     console.log(response);
+    //     if (response.url) {
+    //       window.location.href = response.url;
+    //       // console.log(response.url);
+    //     }
+    //   });
   };
 
   return (

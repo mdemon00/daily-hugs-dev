@@ -44,6 +44,25 @@ const CartProvider = ({ children }) => {
     setCart(filteredCart);
   };
 
+  const calculateSubtotal = () => {
+    return cart.reduce(
+      (acc, el) => acc + Number(el.discountedPrice * el.numOfBoxes),
+      0
+    );
+  };
+
+  const calculateTaxes = () => {
+    const subtotal = calculateSubtotal();
+    const taxRate = 0.09; // 9% tax rate (you can customize this)
+    return subtotal * taxRate;
+  };
+
+  const calculateTotal = () => {
+    const subtotal = calculateSubtotal();
+    //const taxes = calculateTaxes();
+    return subtotal;
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -52,6 +71,9 @@ const CartProvider = ({ children }) => {
         removeFromCart,
         incrementQuantity,
         decrementQuantity,
+        calculateTotal,
+        calculateTaxes,
+        calculateSubtotal,
       }}
     >
       {children}
