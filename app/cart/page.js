@@ -37,18 +37,18 @@ const Cart = () => {
     calculateSubtotal,
   } = useCart();
 
-  const handleAddToCart = () => {
-    const sampleProduct = {
-      image: "/RomanceDose/Dose_1.png",
-      id: "234rwed2343ew",
-      title: "DailyHugs Standard",
-      originalPrice: 3455,
-      discountedPrice: 3000,
-      numOfBoxes: 1,
-    };
+  // const handleAddToCart = () => {
+  //   const sampleProduct = {
+  //     image: "/RomanceDose/Dose_1.png",
+  //     id: "234rwed2343ew",
+  //     title: "DailyHugs Standard",
+  //     originalPrice: 3455,
+  //     discountedPrice: 3000,
+  //     numOfBoxes: 1,
+  //   };
 
-    addToCart(sampleProduct);
-  };
+  //   addToCart(sampleProduct);
+  // };
 
   const handleRemoveFromCart = (productId) => {
     removeFromCart(productId);
@@ -69,26 +69,26 @@ const Cart = () => {
   };
 
   const handleNextStep = async () => {
-    handleAddToCart();
+    // handleAddToCart();
     // router.push("/shipping-details");
-    // router.push("/shipping-details");
-    // await fetch("http://localhost:3000/api/checkout", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ products: updatedCartProducts }),
-    // })
-    //   .then((response) => {
-    //     return response.json();
-    //   })
-    //   .then((response) => {
-    //     console.log(response);
-    //     if (response.url) {
-    //       window.location.href = response.url;
-    //       // console.log(response.url);
-    //     }
-    //   });
+
+    await fetch("http://localhost:3000/api/checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ products: cart }),
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.url) {
+          window.location.href = response.url;
+          // console.log(response.url);
+        }
+      });
   };
 
   return (

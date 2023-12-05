@@ -15,6 +15,7 @@ import ThemeButton from "../common/ThemeButton";
 import { useModalContext } from "@/context/ModalContext";
 import SelectDate from "../Sections/SelectDate";
 import "./date-picker.css";
+import { useCart } from "app/cart/CartContext";
 
 const SelectDeliveryDate = () => {
   const {
@@ -24,12 +25,35 @@ const SelectDeliveryDate = () => {
     handleOrderFlowModalReset,
   } = useModalContext();
 
+  const {
+    cart,
+    addToCart,
+    removeFromCart,
+    incrementQuantity,
+    decrementQuantity,
+    calculateTotal,
+    calculateTaxes,
+    calculateSubtotal,
+  } = useCart();
+
+      const sampleProduct = {
+      image: "/RomanceDose/Dose_1.png",
+      id: "234rwed2343ew",
+      title: "DailyHugs Standard",
+      originalPrice: 3455,
+      discountedPrice: 3000,
+      numOfBoxes: 1,
+    };
+
+
   const handleClose = () => {
     setSelectDeliveryDate({ ...selectDeliveryDate, isOpen: false });
   };
 
   const handleNextStep = () => {
     // handleOrderFlowModalReset();
+    addToCart(sampleProduct);
+
     setCartDrawerModal({ isOpen: true, data: {} });
   };
 
