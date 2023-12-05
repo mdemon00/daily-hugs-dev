@@ -4,6 +4,7 @@ import ThemeButton from "@/components/common/ThemeButton";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useCart } from "./CartContext";
 
 export const cartProducts = [
   {
@@ -25,6 +26,39 @@ export const cartProducts = [
 ];
 
 const Cart = () => {
+  const {
+    cart,
+    addToCart,
+    removeFromCart,
+    incrementQuantity,
+    decrementQuantity,
+  } = useCart();
+
+  const handleAddToCart = () => {
+    const sampleProduct = {
+      image: "/RomanceDose/Dose_1.png",
+      id: "234rwed2343ew",
+      title: "DailyHugs Standard",
+      originalPrice: 3455,
+      discountedPrice: 3000,
+      numOfBoxes: 1,
+    };
+
+    addToCart(sampleProduct);
+  };
+
+  const handleRemoveFromCart = (productId) => {
+    removeFromCart(productId);
+  };
+
+  const handleIncrementQuantity = (productId) => {
+    incrementQuantity(productId);
+  };
+
+  const handleDecrementQuantity = (productId) => {
+    decrementQuantity(productId);
+  };
+
   const [updatedCartProducts, setUpdatedCartProducts] = useState(cartProducts);
   const router = useRouter();
 
@@ -32,39 +66,9 @@ const Cart = () => {
     router.back();
   };
 
-  const handleAdd = (productId) => {
-    const newCartProducts = updatedCartProducts.map((el, idx) => {
-      if (el.id === productId) {
-        return { ...el, numOfBoxes: el.numOfBoxes + 1 };
-      } else {
-        return el;
-      }
-    });
-    setUpdatedCartProducts((prev) => newCartProducts);
-  };
-
-  const handleRemove = (productId) => {
-    const newCartProducts = updatedCartProducts.map((el, idx) => {
-      if (el.id === productId) {
-        return { ...el, numOfBoxes: el.numOfBoxes - 1 };
-      } else {
-        return el;
-      }
-    });
-    setUpdatedCartProducts((prev) => newCartProducts);
-  };
-
-  const handleDelete = (productId) => {
-    const newCartProducts = updatedCartProducts.filter((el, idx) => {
-      if (el.id !== productId) {
-        return el;
-      }
-    });
-    setUpdatedCartProducts((prev) => newCartProducts);
-  };
-
   const handleNextStep = async () => {
     // router.push("/shipping-details");
+    router.push("/shipping-details");
     await fetch("http://localhost:3000/api/checkout", {
       method: "POST",
       headers: {
@@ -85,7 +89,7 @@ const Cart = () => {
   };
 
   const calculateSubtotal = () => {
-    return updatedCartProducts.reduce(
+    return cart.reduce(
       (acc, el) => acc + Number(el.discountedPrice * el.numOfBoxes),
       0
     );
@@ -122,7 +126,7 @@ const Cart = () => {
       </div>
 
       <div className="mx-6">
-        {updatedCartProducts.map((el, idx) => {
+        {cart.map((el, idx) => {
           return (
             <div key={el.id} className="py-6 border-b-[1px] border-black">
               <div className={`flex space-x-4`}>
@@ -143,7 +147,7 @@ const Cart = () => {
                         {el.numOfBoxes} {el.numOfBoxes > 1 ? "Boxes" : "Box"}
                       </div>
                     </div>
-                    <button onClick={() => handleDelete(el.id)}>
+                    <button onClick={() => handleRemoveFromCart(el.id)}>
                       <Image src={"/Icons/Delete.svg"} height={16} width={16} />
                     </button>
                   </div>
@@ -153,7 +157,7 @@ const Cart = () => {
                       <div className="flex items-center space-x-1 text-14">
                         <button
                           onClick={() => {
-                            handleRemove(el.id);
+                            handleDecrementQuantity(el.id);
                           }}
                           disabled={el.numOfBoxes === 1}
                           className="disabled:opacity-20 border-[1px] border-black h-[16px] w-[16px] flex items-center justify-center rounded-full"
@@ -165,7 +169,7 @@ const Cart = () => {
                         </div>
                         <button
                           onClick={() => {
-                            handleAdd(el.id);
+                            handleIncrementQuantity(el.id);
                           }}
                           className="border-[1px] border-black h-[16px] w-[16px] flex items-center justify-center rounded-full"
                         >
