@@ -28,11 +28,14 @@ const SelectBoxDrawer = () => {
     setSelectBoxModal({ ...selectBoxModal, isOpen: false });
   };
 
+  const passedData = selectBoxModal.data;
+
+  console.log(passedData);
   const handleNextStep = () => {
     if (!orderPayload?.box?.id) {
       themeToast("Please select a box");
     } else {
-      setSelectCardModal({ isOpen: true, data: {} });
+      setSelectCardModal({ isOpen: true, data: passedData });
     }
   };
 

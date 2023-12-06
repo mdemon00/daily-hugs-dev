@@ -36,14 +36,14 @@ const SelectDeliveryDate = () => {
     calculateSubtotal,
   } = useCart();
 
-      const sampleProduct = {
-      image: "/RomanceDose/Dose_1.png",
-      id: "234rwed2343ew",
-      title: "DailyHugs Standard",
-      originalPrice: 3455,
-      discountedPrice: 3000,
-      numOfBoxes: 1,
-    };
+    //   const sampleProduct = {
+    //   image: "/RomanceDose/Dose_1.png",
+    //   id: "234rwed2343ew",
+    //   title: "DailyHugs ",
+    //   originalPrice: 3455,
+    //   discountedPrice: 3000,
+    //   numOfBoxes: 1,
+    // };
 
 
   const handleClose = () => {
@@ -52,7 +52,7 @@ const SelectDeliveryDate = () => {
 
   const handleNextStep = () => {
     // handleOrderFlowModalReset();
-    addToCart(sampleProduct);
+ //   addToCart(sampleProduct);
 
     setCartDrawerModal({ isOpen: true, data: {} });
   };

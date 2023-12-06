@@ -67,6 +67,15 @@ const benefitsAgainstPrice = [
 ];
 
 const Shop = () => {
+  const sampleProduct = {
+    image: "/RomanceDose/Dose_1.png",
+    id: "234rwed2343ew",
+    title: "DailyHugs ",
+    originalPrice: 3455,
+    discountedPrice: 3000,
+    numOfBoxes: 1,
+  };
+
   const [currentDisplayImage, setCurrentDisplayImage] = useState(
     productData.images[0]
   );
@@ -82,6 +91,11 @@ const Shop = () => {
 
   const handleVariantClick = (variantIndex) => {
     setSelectedVariantIndex(variantIndex);
+  };
+
+  const handleDueDateChange = (event) => {
+    const selectedDate = event.target.value;
+    sampleProduct.dueDate = selectedDate;
   };
 
   return (
@@ -159,6 +173,7 @@ const Shop = () => {
               type="date"
               className="hidden lg:block border border-accent-purple rounded-[4px] px-[10px] py-[6px] inter-400 text-14 text-accent-purple"
               min={minDate}
+              onChange={handleDueDateChange}
             />
             <div className="flex items-center space-x-[6px] inter-700 text-14 mt-[14px]">
               <Image
@@ -175,7 +190,7 @@ const Shop = () => {
             <ThemeButton
               title={"SEND A BOUQUET"}
               onClick={() => {
-                setSelectBoxModal({ isOpen: true, data: {} });
+                setSelectBoxModal({ isOpen: true, data: sampleProduct });
               }}
             />
           </div>

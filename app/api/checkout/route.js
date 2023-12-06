@@ -69,8 +69,20 @@ export const POST = async (request) => {
     }
   }
 
+  const paymentIntentData = {
+    // other properties...
+    metadata: {
+      order_id: "12345",
+      customer_name: "John Doe",
+      product: "Example Product",
+      // ...other key-value pairs
+    },
+    // ...other properties
+  };
+
   // Create a new checkout session with the selected items
   const session = await stripe.checkout.sessions.create({
+    payment_intent_data: paymentIntentData,
     payment_method_types: ["ideal", "card"],
     line_items: stripeItems,
     mode: "payment",
