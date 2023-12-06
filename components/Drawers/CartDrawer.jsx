@@ -21,6 +21,7 @@ import WaterDrop from "../Icons/Steps/WaterDrop";
 import SmallBlackTick from "../Icons/Common/SmallBlackTick";
 
 const CartDrawer = () => {
+
   const router = useRouter();
 
   const { cartDrawerModal, setCartDrawerModal, handleOrderFlowModalReset } =

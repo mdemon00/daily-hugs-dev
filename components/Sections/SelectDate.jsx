@@ -3,9 +3,11 @@
 import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useAuth } from "context/AuthContext";
 
 const SelectDate = () => {
-  const [startDate, setStartDate] = useState(new Date());
+  const { productPayload, setProduct, resetProduct } = useAuth();
+  const [startDate, setStartDate] = useState(productPayload.info.dueDate ? new Date(productPayload.info.dueDate) : new Date());
   const minDate = new Date();
   const maxDate = new Date();
   maxDate.setFullYear(maxDate.getFullYear() + 1);
@@ -26,6 +28,9 @@ const SelectDate = () => {
         selected={startDate}
         open={isCalendarOpen}
         onChange={(e) => {
+          // console.log(e);
+          productPayload.info.dueDate = e;
+          setProduct(productPayload);
           setStartDate(e);
         }}
         highlightDates={startDate}

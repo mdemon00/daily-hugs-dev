@@ -70,25 +70,27 @@ const Cart = () => {
 
   const handleNextStep = async () => {
     // handleAddToCart();
-    // router.push("/shipping-details");
+    router.push("/shipping-details");
 
-    await fetch("http://localhost:3000/api/checkout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ products: cart }),
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.url) {
-          window.location.href = response.url;
-          // console.log(response.url);
-        }
-      });
+    // await fetch("http://localhost:3000/api/checkout", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ products: cart }),
+    // })
+    //   .then((response) => {
+    //     return response.json();
+    //   })
+    //   .then((response) => {
+    //     console.log(response);
+    //     if (response.url) {
+    //       window.location.href = response.url;
+    //       // console.log(response.url);
+    //     }
+    //   });
+
+    // console.log(cart);
   };
 
   return (

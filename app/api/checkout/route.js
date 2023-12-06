@@ -14,9 +14,10 @@ const getActiveProducts = async () => {
 // Define the POST endpoint
 export const POST = async (request) => {
   // Extract the products from the request body
-  const { products } = await request.json();
+  const { products, infos } = await request.json();
   // Rename 'data' to a more descriptive variable name
   const productData = products;
+  const info = infos;
 
   // Get the currently active products from Stripe
   let activeProducts = await getActiveProducts();
@@ -24,7 +25,7 @@ export const POST = async (request) => {
   try {
     // Loop through the received products
     for (const product of productData) {
-      console.log(product);
+      //console.log(product);
       // Find the corresponding product in the active products list
       const stripeProduct = activeProducts?.find(
         (activeProduct) =>
@@ -61,6 +62,7 @@ export const POST = async (request) => {
 
     // If the product exists in Stripe, add it to the list of items for checkout
     if (stripeProduct) {
+      console.log(stripeProduct);
       stripeItems.push({
         price: stripeProduct?.default_price,
         quantity: product?.numOfBoxes,
@@ -69,22 +71,22 @@ export const POST = async (request) => {
     }
   }
 
+  // console.log(stripeItems);
+  // console.log(activeProducts);
+  console.log(info);
+  console.log(products);
+
   const paymentIntentData = {
-    // other properties...
     metadata: {
-      order_id: "12345",
-      customer_name: "John Doe",
-      product: "Example Product",
-      // ...other key-value pairs
+      test: "all customer infos will be here",
     },
-    // ...other properties
   };
 
   // Create a new checkout session with the selected items
   const session = await stripe.checkout.sessions.create({
+    line_items: stripeItems,
     payment_intent_data: paymentIntentData,
     payment_method_types: ["ideal", "card"],
-    line_items: stripeItems,
     mode: "payment",
     success_url: "http://localhost:3000/success",
     cancel_url: "http://localhost:3000/cancel",

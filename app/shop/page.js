@@ -11,6 +11,7 @@ import Delivery from "@/components/Icons/Shop/Delivery";
 import Mail from "@/components/Icons/Shop/Mail";
 import PriceIncludesCard from "@/components/Icons/Common/PriceIncludesCard";
 import ShopBenefitsCard from "@/components/Icons/Common/ShopBenefitsCard";
+import { useAuth } from "context/AuthContext";
 
 const productData = {
   id: "1234134",
@@ -67,13 +68,16 @@ const benefitsAgainstPrice = [
 ];
 
 const Shop = () => {
+  const { productPayload, setProduct, resetProduct } = useAuth();
+
   const sampleProduct = {
     image: "/RomanceDose/Dose_1.png",
     id: "234rwed2343ew",
-    title: "DailyHugs ",
+    title: "DailyHugs Bouquette",
     originalPrice: 3455,
     discountedPrice: 3000,
     numOfBoxes: 1,
+    info: {},
   };
 
   const [selectedDueDate, setSelectedDueDate] = useState("");
@@ -191,11 +195,12 @@ const Shop = () => {
             <ThemeButton
               title={"SEND A BOUQUET"}
               onClick={() => {
-                sampleProduct.dueDate = selectedDueDate;
-
+                sampleProduct.info.dueDate = selectedDueDate;
                 const selectedVariant =
                   productData.variants[selectedVariantIndex];
-                sampleProduct.variant = selectedVariant;
+                sampleProduct.info.variant = selectedVariant.legendText;
+
+                setProduct(sampleProduct);
 
                 setSelectBoxModal({ isOpen: true, data: sampleProduct });
               }}

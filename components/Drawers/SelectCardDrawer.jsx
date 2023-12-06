@@ -15,8 +15,10 @@ import Image from "next/image";
 import ThemeButton from "../common/ThemeButton";
 import { useModalContext } from "@/context/ModalContext";
 import { themeToast } from "@/utils/helper";
+import { useAuth } from "context/AuthContext";
 
 const SelectCardDrawer = () => {
+  const { productPayload, setProduct, resetProduct } = useAuth();
   const {
     selectCardModal,
     setSelectCardModal,
@@ -33,6 +35,9 @@ const SelectCardDrawer = () => {
     if (!orderPayload?.card?.id) {
       themeToast("Please select a card");
     } else {
+
+      productPayload.info.selectedCard = orderPayload?.card;
+      setProduct(productPayload);
       setAddNoteModal({ isOpen: true, data: {} });
     }
   };

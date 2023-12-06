@@ -15,8 +15,21 @@ import SelectBox from "../Sections/SelectBox";
 import ThemeButton from "../common/ThemeButton";
 import { useModalContext } from "@/context/ModalContext";
 import { themeToast } from "@/utils/helper";
+import { useAuth } from "context/AuthContext";
+import { useCart } from "app/cart/CartContext";
 
 const SelectBoxDrawer = () => {
+  const { productPayload, setProduct, resetProduct } = useAuth();
+  const {
+    cart,
+    addToCart,
+    removeFromCart,
+    incrementQuantity,
+    decrementQuantity,
+    calculateTotal,
+    calculateTaxes,
+    calculateSubtotal,
+  } = useCart();
   const {
     selectBoxModal,
     setSelectBoxModal,
@@ -28,14 +41,15 @@ const SelectBoxDrawer = () => {
     setSelectBoxModal({ ...selectBoxModal, isOpen: false });
   };
 
-  const passedData = selectBoxModal.data;
-
-  console.log(passedData);
   const handleNextStep = () => {
     if (!orderPayload?.box?.id) {
       themeToast("Please select a box");
     } else {
-      setSelectCardModal({ isOpen: true, data: passedData });
+      productPayload.info.selectedBox = orderPayload?.box?.title;
+      setProduct(productPayload);
+      addToCart(productPayload);
+
+      setSelectCardModal({ isOpen: true, data: {} });
     }
   };
 
