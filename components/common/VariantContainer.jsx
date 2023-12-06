@@ -17,8 +17,10 @@ const VariantContainer = ({
       type="button"
       onClick={() => onClick(index)}
       className={`outline ${
-        isSelected ? "outline-[3px]" : "hover:outline-[2px]"
-      } outline-[#4035DA] transition duration-300 rounded-[5px] h-[100px] w-[100px] relative`}
+        isSelected
+          ? "border-[3px] border-solid border-accent-purple"
+          : "hover:outline-[2px]"
+      } transition duration-300 rounded-[5px] h-[100px] w-[100px] relative`}
     >
       {legendText && (
         <div className="absolute text-8 flex items-center justify-center bg-accent-purple top-[-7px] left-[50%] translate-x-[-50%] w-max h-[14px] px-[8px] rounded-full text-accent-yellow inter-700">

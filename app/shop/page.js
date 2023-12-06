@@ -1,16 +1,16 @@
 "use client";
 
-import PriceIncludesCard from "@/components/Icons/Common/PriceIncludesCard";
-import ShopBenefitsCard from "@/components/Icons/Common/ShopBenefitsCard";
-import CalenderLarge from "@/components/Icons/Shop/CalenderLarge";
-import Delivery from "@/components/Icons/Shop/Delivery";
-import Mail from "@/components/Icons/Shop/Mail";
+import React, { useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import ThemeButton from "@/components/common/ThemeButton";
 import VariantContainer from "@/components/common/VariantContainer";
 import { useModalContext } from "@/context/ModalContext";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import CalenderLarge from "@/components/Icons/Shop/CalenderLarge";
+import Delivery from "@/components/Icons/Shop/Delivery";
+import Mail from "@/components/Icons/Shop/Mail";
+import PriceIncludesCard from "@/components/Icons/Common/PriceIncludesCard";
+import ShopBenefitsCard from "@/components/Icons/Common/ShopBenefitsCard";
 
 const productData = {
   id: "1234134",
@@ -76,6 +76,8 @@ const Shop = () => {
     numOfBoxes: 1,
   };
 
+  const [selectedDueDate, setSelectedDueDate] = useState("");
+
   const [currentDisplayImage, setCurrentDisplayImage] = useState(
     productData.images[0]
   );
@@ -95,7 +97,7 @@ const Shop = () => {
 
   const handleDueDateChange = (event) => {
     const selectedDate = event.target.value;
-    sampleProduct.dueDate = selectedDate;
+    setSelectedDueDate(selectedDate);
   };
 
   return (
@@ -114,7 +116,6 @@ const Shop = () => {
                   width: "70px",
                   borderRadius: "10px",
                 }}
-                // layout="fill"
                 className="relative"
                 onClick={() => setCurrentDisplayImage(image)}
                 alt={`${productData.title}-${el + 1}`}
@@ -159,7 +160,7 @@ const Shop = () => {
                   numOfBox={el.numOfBox}
                   originalPrice={el.originalPrice}
                   legendText={el.legendText}
-                  onClick={handleVariantClick}
+                  onClick={() => handleVariantClick(idx)}
                   index={idx}
                   key={idx}
                 />
@@ -190,6 +191,12 @@ const Shop = () => {
             <ThemeButton
               title={"SEND A BOUQUET"}
               onClick={() => {
+                sampleProduct.dueDate = selectedDueDate;
+
+                const selectedVariant =
+                  productData.variants[selectedVariantIndex];
+                sampleProduct.variant = selectedVariant;
+
                 setSelectBoxModal({ isOpen: true, data: sampleProduct });
               }}
             />
@@ -197,7 +204,11 @@ const Shop = () => {
 
           <div className="flex flex-col sm:flex-row space-y-5 sm:space-y-0 sm:space-x-5 mt-8">
             {shopBenefits.map((el, idx) => (
-              <ShopBenefitsCard description={el.description} icon={el.icon} />
+              <ShopBenefitsCard
+                description={el.description}
+                icon={el.icon}
+                key={idx}
+              />
             ))}
           </div>
         </div>
