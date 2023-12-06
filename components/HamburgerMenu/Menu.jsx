@@ -8,7 +8,12 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
   const router = useRouter();
 
   const handleMenuClosing = () => {
-    setIsMenuOpen(false);
+    //setIsMenuOpen(false);
+    if (typeof setIsMenuOpen === 'function') {
+      setIsMenuOpen(false);
+    } else {
+      console.error('setIsMenuOpen is not a function');
+    }
   };
 
   return (

@@ -15,7 +15,12 @@ const Navbar = () => {
   const { cartDrawerModal, setCartDrawerModal } = useModalContext();
 
   const handleMenuToggle = () => {
-    setIsMenuOpen(!isMenuOpen);
+    //setIsMenuOpen(!isMenuOpen);
+    if (typeof setIsMenuOpen === 'function') {
+      setIsMenuOpen(!isMenuOpen);
+    } else {
+      console.error('setIsMenuOpen is not a function');
+    }
   };
 
   return (
