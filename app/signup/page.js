@@ -4,8 +4,13 @@ import ThemeButton from "@/components/common/ThemeButton";
 import Image from "next/image";
 import React, { useState } from "react";
 import axios from "axios";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "context/AuthContext";
 
 const Signup = () => {
+  const router = useRouter();
+  const { setSuccess } = useAuth();
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -29,6 +34,12 @@ const Signup = () => {
       );
       // Handle the response as needed
       console.log("Signup successful", response.data);
+
+      // Set the signup success status using context
+      setSuccess();
+
+      // Redirect to login page
+      router.push("/login");
     } catch (error) {
       // Handle errors
       console.error("Signup failed", error);
@@ -90,6 +101,14 @@ const Signup = () => {
           />
           <div className="mt-[900px]">
             <ThemeButton title={"Signup"} onClick={handleSignup} />
+          </div>
+          <div className="mt-4 mb-4 text-center">
+            <p>
+              Already have an account?{" "}
+              <Link href="/login">
+                <span className="text-accent-purple">Login</span>
+              </Link>
+            </p>
           </div>
           {error && (
             <div className="mt-4 p-4 bg-red-500 text-white rounded-md">
