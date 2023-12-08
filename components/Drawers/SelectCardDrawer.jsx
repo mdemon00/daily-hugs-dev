@@ -36,7 +36,7 @@ const SelectCardDrawer = () => {
       themeToast("Please select a card");
     } else {
 
-      productPayload.info.selectedCard = orderPayload?.card;
+      productPayload.info.selectedCard = orderPayload?.card.image;
       setProduct(productPayload);
       setAddNoteModal({ isOpen: true, data: {} });
     }

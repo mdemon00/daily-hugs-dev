@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React from "react";
 import {
   Drawer,
   DrawerBody,
@@ -16,8 +16,10 @@ import { useModalContext } from "@/context/ModalContext";
 import SelectDate from "../Sections/SelectDate";
 import "./date-picker.css";
 import { useCart } from "app/cart/CartContext";
+import { useAuth } from "context/AuthContext";
 
 const SelectDeliveryDate = () => {
+  const { productPayload, setProduct } = useAuth();
   const {
     selectDeliveryDate,
     setSelectDeliveryDate,
@@ -26,24 +28,10 @@ const SelectDeliveryDate = () => {
   } = useModalContext();
 
   const {
-    cart,
-    addToCart,
-    removeFromCart,
-    incrementQuantity,
-    decrementQuantity,
-    calculateTotal,
-    calculateTaxes,
-    calculateSubtotal,
-  } = useCart();
 
-    //   const sampleProduct = {
-    //   image: "/RomanceDose/Dose_1.png",
-    //   id: "234rwed2343ew",
-    //   title: "DailyHugs ",
-    //   originalPrice: 3455,
-    //   discountedPrice: 3000,
-    //   numOfBoxes: 1,
-    // };
+    addToCart,
+
+  } = useCart();
 
 
   const handleClose = () => {
@@ -52,8 +40,9 @@ const SelectDeliveryDate = () => {
 
   const handleNextStep = () => {
     // handleOrderFlowModalReset();
- //   addToCart(sampleProduct);
-
+    let updatedProductPayload = productPayload.info.dueDate ? productPayload.info.dueDate : new Date()
+    setProduct(updatedProductPayload);
+    addToCart(productPayload);
     setCartDrawerModal({ isOpen: true, data: {} });
   };
 

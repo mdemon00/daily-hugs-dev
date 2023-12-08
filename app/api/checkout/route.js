@@ -14,47 +14,45 @@ const getActiveProducts = async () => {
 // Define the POST endpoint
 export const POST = async (request) => {
   // Extract the products from the request body
-  const { products, infos } = await request.json();
-  // Rename 'data' to a more descriptive variable name
-  const productData = products;
-  const info = infos;
+  const { products, shippingDetails } = await request.json();
 
   // Get the currently active products from Stripe
   let activeProducts = await getActiveProducts();
 
-  try {
-    // Loop through the received products
-    for (const product of productData) {
-      //console.log(product);
-      // Find the corresponding product in the active products list
-      const stripeProduct = activeProducts?.find(
-        (activeProduct) =>
-          activeProduct?.name?.toLowerCase() == product?.title?.toLowerCase()
-      );
+  // try {
+  //   // Loop through the received products
+  //   for (const product of products) {
+  //     //console.log(product);
+  //     // Find the corresponding product in the active products list
+  //     const stripeProduct = activeProducts?.find(
+  //       (activeProduct) =>
+  //         activeProduct?.name?.toLowerCase() == product?.title?.toLowerCase()
+  //     );
 
-      // If the product doesn't exist in Stripe, create a new one
-      if (stripeProduct == undefined) {
-        const newProduct = await stripe.products.create({
-          name: product.title,
-          // Set the default price data for the new product
-          default_price_data: {
-            unit_amount: product.discountedPrice * 100,
-            currency: "eur",
-          },
-        });
-      }
-    }
-  } catch (error) {
-    console.error("Error in creating a new product", error);
-    throw error;
-  }
+  //     // If the product doesn't exist in Stripe, create a new one
+  //     if (stripeProduct == undefined) {
+  //       const newProduct = await stripe.products.create({
+  //         name: product.title,
+  //         // Set the default price data for the new product
+  //         default_price_data: {
+  //           unit_amount: product.discountedPrice * 100,
+  //           currency: "eur",
+  //         },
+  //       });
+  //     }
+  //   }
+  // } catch (error) {
+  //   console.error("Error in creating a new product", error);
+  //   throw error;
+  // }
 
-  // Refresh the list of active products after potential additions
-  activeProducts = await getActiveProducts();
+  // // Refresh the list of active products after potential additions
+  // activeProducts = await getActiveProducts();
+
   let stripeItems = [];
 
   // Loop through the received products again
-  for (const product of productData) {
+  for (const product of products) {
     // Find the corresponding product in the updated list of active products
     const stripeProduct = activeProducts?.find(
       (prod) => prod?.name?.toLowerCase() == product?.title?.toLowerCase()
@@ -62,7 +60,7 @@ export const POST = async (request) => {
 
     // If the product exists in Stripe, add it to the list of items for checkout
     if (stripeProduct) {
-      console.log(stripeProduct);
+      console.log("stripeProduct found");
       stripeItems.push({
         price: stripeProduct?.default_price,
         quantity: product?.numOfBoxes,
@@ -71,16 +69,52 @@ export const POST = async (request) => {
     }
   }
 
-  // console.log(stripeItems);
+  console.log(products[0].info);
   // console.log(activeProducts);
-  console.log(info);
-  console.log(products);
+  //  console.log(shippingDetails);
+  // console.log(products);
 
-  const paymentIntentData = {
-    metadata: {
-      test: "all customer infos will be here",
-    },
-  };
+  function addKeysAndValuesToMetadata(obj1, obj2) {
+    // Function to convert an object to have string keys and string values
+    function convertObject(obj) {
+      const convertedObj = {};
+      for (const key in obj) {
+        const newKey = String(key);
+        const newValue = String(obj[key]);
+        convertedObj[newKey] = newValue;
+      }
+      return convertedObj;
+    }
+
+    // Convert both objects
+    const convertedObj1 = convertObject(obj1);
+    const convertedObj2 = convertObject(obj2);
+
+    // Merge the two converted objects into a single object
+    const finalObj = { ...convertedObj1, ...convertedObj2 };
+
+    // Create metadata object
+    const metadata = {};
+
+    // Add keys and values to metadata
+    for (const key in finalObj) {
+      metadata[key] = finalObj[key];
+    }
+
+    // Create paymentIntentData with metadata
+    const paymentIntentData = {
+      metadata: metadata,
+    };
+
+    return paymentIntentData;
+  }
+
+  // Create paymentIntentData with metadata
+  const paymentIntentData = addKeysAndValuesToMetadata(
+    shippingDetails,
+    products[0].info
+  );
+  // console.log(paymentIntentData);
 
   // Create a new checkout session with the selected items
   const session = await stripe.checkout.sessions.create({

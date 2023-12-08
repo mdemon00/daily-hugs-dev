@@ -7,7 +7,7 @@ import { useAuth } from "context/AuthContext";
 
 const SelectDate = () => {
   const { productPayload, setProduct, resetProduct } = useAuth();
-  const [startDate, setStartDate] = useState(productPayload.info.dueDate ? new Date(productPayload.info.dueDate) : new Date());
+  const [startDate, setStartDate] = useState(productPayload.info?.dueDate ? new Date(productPayload.info.dueDate) : new Date());
   const minDate = new Date();
   const maxDate = new Date();
   maxDate.setFullYear(maxDate.getFullYear() + 1);

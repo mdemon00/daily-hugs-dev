@@ -63,6 +63,10 @@ const CartProvider = ({ children }) => {
     return subtotal;
   };
 
+  const resetCart = () => {
+    setCart([]);
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -74,6 +78,7 @@ const CartProvider = ({ children }) => {
         calculateTotal,
         calculateTaxes,
         calculateSubtotal,
+        resetCart,
       }}
     >
       {children}

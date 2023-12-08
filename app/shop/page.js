@@ -12,6 +12,7 @@ import Mail from "@/components/Icons/Shop/Mail";
 import PriceIncludesCard from "@/components/Icons/Common/PriceIncludesCard";
 import ShopBenefitsCard from "@/components/Icons/Common/ShopBenefitsCard";
 import { useAuth } from "context/AuthContext";
+import { useCart } from "app/cart/CartContext";
 
 const productData = {
   id: "1234134",
@@ -68,7 +69,8 @@ const benefitsAgainstPrice = [
 ];
 
 const Shop = () => {
-  const { productPayload, setProduct, resetProduct } = useAuth();
+  const { setProduct } = useAuth();
+  const { resetCart } = useCart();
 
   const sampleProduct = {
     image: "/RomanceDose/Dose_1.png",
@@ -195,7 +197,12 @@ const Shop = () => {
             <ThemeButton
               title={"SEND A BOUQUET"}
               onClick={() => {
-                sampleProduct.info.dueDate = selectedDueDate;
+                // temporary intialize the cart to empty
+                resetCart();
+
+                sampleProduct.info.dueDate = selectedDueDate
+                  ? selectedDueDate
+                  : new Date();
                 const selectedVariant =
                   productData.variants[selectedVariantIndex];
                 sampleProduct.info.variant = selectedVariant.legendText;

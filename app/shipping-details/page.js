@@ -7,16 +7,7 @@ import { Country, State, City } from "country-state-city";
 import { useCart } from "app/cart/CartContext";
 
 const ShippingDetails = () => {
-  const {
-    cart,
-    addToCart,
-    removeFromCart,
-    incrementQuantity,
-    decrementQuantity,
-    calculateTotal,
-    calculateTaxes,
-    calculateSubtotal,
-  } = useCart();
+  const { cart } = useCart();
   const [formData, setFormData] = useState({});
 
   const [addressDetails, setAddressDetails] = useState({
@@ -85,7 +76,7 @@ const ShippingDetails = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ products: cart, infos: formData }),
+      body: JSON.stringify({ products: cart, shippingDetails: formData }),
     })
       .then((response) => {
         return response.json();

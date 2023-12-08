@@ -28,7 +28,6 @@ export const cartProducts = [
 const Cart = () => {
   const {
     cart,
-    addToCart,
     removeFromCart,
     incrementQuantity,
     decrementQuantity,

@@ -16,20 +16,10 @@ import ThemeButton from "../common/ThemeButton";
 import { useModalContext } from "@/context/ModalContext";
 import { themeToast } from "@/utils/helper";
 import { useAuth } from "context/AuthContext";
-import { useCart } from "app/cart/CartContext";
 
 const SelectBoxDrawer = () => {
   const { productPayload, setProduct, resetProduct } = useAuth();
-  const {
-    cart,
-    addToCart,
-    removeFromCart,
-    incrementQuantity,
-    decrementQuantity,
-    calculateTotal,
-    calculateTaxes,
-    calculateSubtotal,
-  } = useCart();
+
   const {
     selectBoxModal,
     setSelectBoxModal,
@@ -47,7 +37,7 @@ const SelectBoxDrawer = () => {
     } else {
       productPayload.info.selectedBox = orderPayload?.box?.title;
       setProduct(productPayload);
-      addToCart(productPayload);
+      // addToCart(productPayload);
 
       setSelectCardModal({ isOpen: true, data: {} });
     }
