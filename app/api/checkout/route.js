@@ -69,6 +69,17 @@ export const POST = async (request) => {
     }
   }
 
+  stripeItems.push({
+    price_data: {
+      currency: "eur",
+      product_data: {
+        name: "Freshness Protection",
+      },
+      unit_amount: 400, // 4 eurs in cents
+    },
+    quantity: 1,
+  });
+
   console.log(products[0].info);
   // console.log(activeProducts);
   //  console.log(shippingDetails);
