@@ -1,20 +1,62 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import ThemeButton from "@/components/common/ThemeButton";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAuth } from "context/AuthContext";
 
 const Login = () => {
   const router = useRouter();
   const { signupSuccess, resetSuccess } = useAuth();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-  // // Reset signup success status when the component mounts
-  // useEffect(() => {
-  //   resetSuccess();
-  // }, []);
+  const [error, setError] = useState(null);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    console.log(formData);
+  };
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:9000/api/login",
+        formData
+      );
+
+      const { token, email } = response.data;
+
+      // Store the token and email in local storage
+      localStorage.setItem("token", token);
+      localStorage.setItem("email", email);
+
+      // Redirect to a account or home page
+      router.push("/account");
+    } catch (error) {
+      console.error("Login failed", error);
+      setError(
+        error.response ? error.response.data.message : "An error occurred"
+      );
+    }
+  };
+
+  useEffect(() => {
+    // Display signupSuccess message for 10 seconds
+    if (signupSuccess) {
+      const timeoutId = setTimeout(() => {
+        resetSuccess(); // Reset signupSuccess after 10 seconds
+      }, 10000);
+
+      // Clear the timeout when the component unmounts or signupSuccess changes
+      return () => clearTimeout(timeoutId);
+    }
+  }, [signupSuccess, resetSuccess]);
 
   return (
     <div className="px-6 mb-[50px] lg:mb-[90px] mt-[30px]">
@@ -35,14 +77,18 @@ const Login = () => {
             className="text-14 work-sans-500 placeholder:text-accent-grey border-b-[1px] border-accent-purple focus:border-none focus:outline px-2 py-[6px] w-full max-w-[396px] transition duration-300"
             placeholder="Enter email"
             type="email"
+            name="email"
+            onChange={handleChange}
           />
           <input
             className="text-14 work-sans-500 placeholder:text-accent-grey border-b-[1px] border-accent-purple focus:border-none focus:outline px-2 py-[6px] w-full max-w-[396px] transition duration-300"
             placeholder="Enter password"
-            type="Password"
+            type="password"
+            name="password"
+            onChange={handleChange}
           />
           <div className="mt-[900px]">
-            <ThemeButton title={"Login"} />
+            <ThemeButton title={"Login"} onClick={handleLogin} />
           </div>
           <div className="mt-4 mb-4 text-center">
             <p>
@@ -52,10 +98,15 @@ const Login = () => {
               </Link>
             </p>
           </div>
-
           {signupSuccess && (
             <div className="mt-4 p-4 bg-green-500 text-white rounded-md">
               Signup successful! Please log in.
+            </div>
+          )}
+
+          {error && (
+            <div className="mt-4 p-4 bg-red-500 text-white rounded-md">
+              {error}
             </div>
           )}
         </div>
