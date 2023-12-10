@@ -16,6 +16,7 @@ const CartView = () => {
     calculateTotal,
     calculateTaxes,
     calculateSubtotal,
+    freshnessProtection,
   } = useCart();
 
   return (
@@ -112,6 +113,15 @@ const CartView = () => {
           </div>
         </span>
       </div>
+
+      {freshnessProtection && (
+        <div className="flex justify-between p-2 mx-6">
+          <span>Freshness Protection</span>
+          <span>
+            <div className="text-16 work-sans-600">+€{4.99}</div>
+          </span>
+        </div>
+      )}
 
       {/* Total */}
       <div className="flex justify-between p-2 mx-6">

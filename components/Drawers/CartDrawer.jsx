@@ -19,8 +19,17 @@ import { useRouter } from "next/navigation";
 import CartView from "../Sections/CartView";
 import WaterDrop from "../Icons/Steps/WaterDrop";
 import SmallBlackTick from "../Icons/Common/SmallBlackTick";
+import { useCart } from "app/cart/CartContext";
 
 const CartDrawer = () => {
+
+    const {
+      setFreshnessProtection,
+    } = useCart();
+
+  const handleFreshnessProtectionToggle = () => {
+    setFreshnessProtection((prev) => !prev);
+  };
 
   const router = useRouter();
 
@@ -67,7 +76,8 @@ const CartDrawer = () => {
                   <Switch
                     size={"lg"}
                     colorScheme="brand"
-                    defaultChecked={true}
+                    defaultChecked={false}
+                    onChange={handleFreshnessProtectionToggle}
                   />
                   <div className="work-sans-700 text-12 text-accent-purple">
                     Freshness <br /> Protection

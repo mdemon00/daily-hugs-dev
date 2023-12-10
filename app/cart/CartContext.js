@@ -5,6 +5,7 @@ const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
+  const [freshnessProtection, setFreshnessProtection] = useState(false);
 
   const addToCart = (product) => {
     const existingProductIndex = cart.findIndex(
@@ -60,7 +61,8 @@ const CartProvider = ({ children }) => {
   const calculateTotal = () => {
     const subtotal = calculateSubtotal();
     //const taxes = calculateTaxes();
-    return subtotal;
+    const freshnessProtectionCost = freshnessProtection ? 4.99 : 0;
+    return subtotal + freshnessProtectionCost;
   };
 
   const resetCart = () => {
@@ -79,6 +81,8 @@ const CartProvider = ({ children }) => {
         calculateTaxes,
         calculateSubtotal,
         resetCart,
+        freshnessProtection,
+        setFreshnessProtection,
       }}
     >
       {children}

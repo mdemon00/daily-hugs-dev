@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useCart } from "./CartContext";
+import WaterDrop from "/components/Icons/Steps/WaterDrop";
+import { Switch } from "@chakra-ui/react";
 
 export const cartProducts = [
   {
@@ -34,20 +36,9 @@ const Cart = () => {
     calculateTotal,
     calculateTaxes,
     calculateSubtotal,
+    freshnessProtection,
+    setFreshnessProtection,
   } = useCart();
-
-  // const handleAddToCart = () => {
-  //   const sampleProduct = {
-  //     image: "/RomanceDose/Dose_1.png",
-  //     id: "234rwed2343ew",
-  //     title: "DailyHugs Standard",
-  //     originalPrice: 3455,
-  //     discountedPrice: 3000,
-  //     numOfBoxes: 1,
-  //   };
-
-  //   addToCart(sampleProduct);
-  // };
 
   const handleRemoveFromCart = (productId) => {
     removeFromCart(productId);
@@ -61,6 +52,10 @@ const Cart = () => {
     decrementQuantity(productId);
   };
 
+  const handleFreshnessProtectionToggle = () => {
+    setFreshnessProtection((prev) => !prev);
+  };
+
   const router = useRouter();
 
   const handleClose = () => {
@@ -68,28 +63,7 @@ const Cart = () => {
   };
 
   const handleNextStep = async () => {
-    // handleAddToCart();
     router.push("/shipping-details");
-
-    // await fetch("http://localhost:3000/api/checkout", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ products: cart }),
-    // })
-    //   .then((response) => {
-    //     return response.json();
-    //   })
-    //   .then((response) => {
-    //     console.log(response);
-    //     if (response.url) {
-    //       window.location.href = response.url;
-    //       // console.log(response.url);
-    //     }
-    //   });
-
-    // console.log(cart);
   };
 
   return (
@@ -207,6 +181,15 @@ const Cart = () => {
         </span>
       </div>
 
+      {freshnessProtection && (
+        <div className="flex justify-between p-2 mx-6">
+          <span>Freshness Protection</span>
+          <span>
+            <div className="text-16 work-sans-600">+€{4.99}</div>
+          </span>
+        </div>
+      )}
+
       {/* Total */}
       <div className="flex justify-between p-2 mx-6">
         <span>Total</span>
@@ -219,6 +202,29 @@ const Cart = () => {
 
       <div className="mx-6 my-6">
         <ThemeButton title={"Proceed to checkout"} onClick={handleNextStep} />
+      </div>
+
+      <div className="flex items-center justify-between bg-accent-lightPurple rounded-[8px] overflow-hidden mx-6 mb-4">
+        <div className="flex space-x-[10px] items-center w-fit py-[6px] pl-[4px]">
+          <Switch
+            size={"lg"}
+            colorScheme="brand"
+            defaultChecked={false}
+            onChange={handleFreshnessProtectionToggle}
+          />
+          <div className="work-sans-700 text-12 text-accent-purple">
+            Freshness <br /> Protection
+          </div>
+        </div>
+
+        <div className="flex space-x-[10px] items-center w-fit">
+          <div className="text-12 text-accent-purple work-sans-700">
+            +€{4.99}
+          </div>
+          <div className="bg-accent-purple h-full px-4 py-2">
+            <WaterDrop />
+          </div>
+        </div>
       </div>
     </div>
   );

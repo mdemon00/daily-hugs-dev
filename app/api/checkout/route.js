@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
+const taxRatesString = process.env.TAX_RATES_STRING;
 
 // Function to retrieve active products from Stripe
 const getActiveProducts = async () => {
@@ -14,7 +15,8 @@ const getActiveProducts = async () => {
 // Define the POST endpoint
 export const POST = async (request) => {
   // Extract the products from the request body
-  const { products, shippingDetails } = await request.json();
+  const { products, shippingDetails, freshnessProtection } =
+    await request.json();
 
   // Get the currently active products from Stripe
   let activeProducts = await getActiveProducts();
@@ -51,6 +53,8 @@ export const POST = async (request) => {
 
   let stripeItems = [];
 
+  console.log(products);
+  console.log(activeProducts);
   // Loop through the received products again
   for (const product of products) {
     // Find the corresponding product in the updated list of active products
@@ -60,29 +64,31 @@ export const POST = async (request) => {
 
     // If the product exists in Stripe, add it to the list of items for checkout
     if (stripeProduct) {
-      console.log("stripeProduct found");
+      console.log(stripeProduct);
       stripeItems.push({
         price: stripeProduct?.default_price,
         quantity: product?.numOfBoxes,
-        tax_rates: ["txr_1OJccpHggI5oWQYnDatdH21s"],
+        tax_rates: [taxRatesString],
       });
     }
   }
 
-  stripeItems.push({
-    price_data: {
-      currency: "eur",
-      product_data: {
-        name: "Freshness Protection",
+  if (freshnessProtection) {
+    stripeItems.push({
+      price_data: {
+        currency: "eur",
+        product_data: {
+          name: "Freshness Protection",
+        },
+        unit_amount: 4.99 * 100, // 4.99 eurs in cents
       },
-      unit_amount: 400, // 4 eurs in cents
-    },
-    quantity: 1,
-  });
+      quantity: 1,
+    });
+  }
 
-  console.log(products[0].info);
+  // console.log(products[0].info);
   // console.log(activeProducts);
-  //  console.log(shippingDetails);
+  // console.log(shippingDetails);
   // console.log(products);
 
   function addKeysAndValuesToMetadata(obj1, obj2) {
@@ -123,7 +129,7 @@ export const POST = async (request) => {
   // Create paymentIntentData with metadata
   const paymentIntentData = addKeysAndValuesToMetadata(
     shippingDetails,
-    products[0].info
+    products[0]?.info
   );
   // console.log(paymentIntentData);
 

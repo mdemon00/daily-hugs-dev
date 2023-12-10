@@ -7,7 +7,7 @@ import { Country, State, City } from "country-state-city";
 import { useCart } from "app/cart/CartContext";
 
 const ShippingDetails = () => {
-  const { cart } = useCart();
+  const { cart, freshnessProtection } = useCart();
   const [formData, setFormData] = useState({});
 
   const [addressDetails, setAddressDetails] = useState({
@@ -76,16 +76,29 @@ const ShippingDetails = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ products: cart, shippingDetails: formData }),
+      body: JSON.stringify({
+        products: cart,
+        shippingDetails: formData,
+        freshnessProtection: freshnessProtection,
+      }),
     })
       .then((response) => {
         return response.json();
       })
       .then((response) => {
-        console.log(response);
         if (response.url) {
+          const checkoutResponseData = {
+            cart: cart,
+            formData: formData,
+            freshnessProtection: freshnessProtection,
+          };
+
+          localStorage.setItem(
+            "checkoutResponse",
+            JSON.stringify(checkoutResponseData)
+          );
+
           window.location.href = response.url;
-          // console.log(response.url);
         }
       });
 
