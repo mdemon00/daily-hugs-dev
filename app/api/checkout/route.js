@@ -53,8 +53,8 @@ export const POST = async (request) => {
 
   let stripeItems = [];
 
-  console.log(products);
-  console.log(activeProducts);
+  // console.log(products);
+  // console.log(activeProducts);
   // Loop through the received products again
   for (const product of products) {
     // Find the corresponding product in the updated list of active products

@@ -2,13 +2,27 @@
 
 import ThemeButton from "@/components/common/ThemeButton";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Country, State, City } from "country-state-city";
 import { useCart } from "app/cart/CartContext";
 
 const ShippingDetails = () => {
   const { cart, freshnessProtection } = useCart();
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    senderName: "",
+    senderEmail: "",
+    senderNumber: "",
+    receiverName: "",
+    receiverEmail: "",
+    receiverNumber: "",
+    addressLine1: "",
+    addressLine2: "",
+    landmark: "",
+    country: "NL",
+    zipCode: "",
+    deliveryType: "House",
+  });
+  const [formErrors, setFormErrors] = useState({});
 
   const [addressDetails, setAddressDetails] = useState({
     country: {
@@ -27,6 +41,91 @@ const ShippingDetails = () => {
   const allCountries = Country.getAllCountries();
   const [allStatesOfCountry, setAllStatesOfCountry] = useState([]);
   const [allCitiesOfState, setAllCitiesOfState] = useState([]);
+
+  const validateForm = () => {
+    const errors = {};
+
+    // Sender's Name
+    if (!formData.senderName.trim()) {
+      errors.senderName = "Sender's name is required";
+    }
+
+    // Sender's Email
+    if (!formData.senderEmail.trim()) {
+      errors.senderEmail = "Sender's email is required";
+    } else if (
+      !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/.test(
+        formData.senderEmail
+      )
+    ) {
+      errors.senderEmail = "Enter a valid email address";
+    }
+
+    // Sender's Number
+    if (!formData.senderNumber.trim()) {
+      errors.senderNumber = "Sender's number is required";
+    } else if (!/^\d{10}$/.test(formData.senderNumber)) {
+      errors.senderNumber = "Enter a valid 10-digit number";
+    }
+
+    // Receiver's Name
+    if (!formData.receiverName.trim()) {
+      errors.receiverName = "Receiver's name is required";
+    }
+
+    // Receiver's Email
+    if (!formData.receiverEmail.trim()) {
+      errors.receiverEmail = "Receiver's email is required";
+    } else if (
+      !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/.test(
+        formData.receiverEmail
+      )
+    ) {
+      errors.receiverEmail = "Enter a valid email address";
+    }
+
+    // Receiver's Number
+    if (!formData.receiverNumber.trim()) {
+      errors.receiverNumber = "Receiver's number is required";
+    } else if (!/^\d{10}$/.test(formData.receiverNumber)) {
+      errors.receiverNumber = "Enter a valid 10-digit number";
+    }
+
+    // Address Line 1
+    if (!formData.addressLine1.trim()) {
+      errors.addressLine1 = "Address line 1 is required";
+    }
+
+    // Address Line 2
+    if (!formData.addressLine2.trim()) {
+      errors.addressLine2 = "Address line 2 is required";
+    }
+
+    // Landmark
+    if (!formData.landmark.trim()) {
+      errors.landmark = "Landmark is required";
+    }
+
+    // Country
+    if (!formData.country.trim()) {
+      errors.country = "Country is required";
+    }
+
+    // Zip Code
+    if (!formData.zipCode.trim()) {
+      errors.zipCode = "Zip code is required";
+    }
+
+    // Delivery Type
+    if (!formData.deliveryType.trim()) {
+      errors.deliveryType = "Type of delivery is required";
+    }
+
+    // Repeat this block for other fields
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleChange = (e) => {
     const { value, name } = e.target;
@@ -61,15 +160,29 @@ const ShippingDetails = () => {
       // setAllStatesOfCountry([...State.getStatesOfCountry(value)]);
     }
 
+    // console.log(formData);
     setFormData({
       ...formData,
       [name]: value,
     });
+
+    // Trigger validation for the changed field
+    setFormErrors({
+      ...formErrors,
+      [name]: value.trim() ? "" : `${name} is required`,
+    });
   };
 
   const handleNextStep = async () => {
-    // handleAddToCart();
-    // router.push("/shipping-details");
+    // Validate the form
+    const isValidForm = validateForm();
+
+    // If the form is not valid, prevent proceeding to payment
+    if (!isValidForm) {
+      console.log("not valid");
+      console.log(formErrors);
+      return;
+    }
 
     await fetch("http://localhost:3000/api/checkout", {
       method: "POST",
@@ -105,6 +218,10 @@ const ShippingDetails = () => {
     console.log(cart);
   };
 
+  useEffect(() => {
+    validateForm();
+  }, [formData]);
+
   return (
     <div>
       <div className="w-full lg:max-w-[80%] px-6 lg:mr-0 lg:ml-auto">
@@ -118,23 +235,29 @@ const ShippingDetails = () => {
               <div className="w-full">
                 <div className="text-12">Sender&apos;s name</div>
                 <input
-                  name="Sender's name"
+                  name="senderName"
                   className="text-14 work-sans-500 bg-accent-grey bg-opacity-10 placeholder:text-accent-grey border-b-[1px] border-accent-grey focus:border-none focus:outline px-2 py-[6px] w-full max-w-[396px] transition duration-300"
                   placeholder="Enter name"
                   type="text"
                   onChange={handleChange}
                 />
+                {formErrors.senderName && (
+                  <div className="text-red-500">{formErrors.senderName}</div>
+                )}
               </div>
 
               <div className="w-full">
                 <div className="text-12">Sender&apos;s email</div>
                 <input
-                  name="Sender's email"
+                  name="senderEmail"
                   className="text-14 work-sans-500 bg-accent-grey bg-opacity-10 placeholder:text-accent-grey border-b-[1px] border-accent-grey focus:border-none focus:outline px-2 py-[6px] w-full max-w-[396px] transition duration-300"
                   placeholder="you@yours.com"
                   type="email"
                   onChange={handleChange}
                 />
+                {formErrors.senderEmail && (
+                  <div className="text-red-500">{formErrors.senderEmail}</div>
+                )}
               </div>
             </div>
 
@@ -142,12 +265,15 @@ const ShippingDetails = () => {
               <div className="w-full">
                 <div className="text-12">Sender&apos;s number</div>
                 <input
-                  name="Sender's number"
+                  name="senderNumber"
                   className="text-14 work-sans-500 bg-accent-grey bg-opacity-10 placeholder:text-accent-grey border-b-[1px] border-accent-grey focus:border-none focus:outline px-2 py-[6px] w-full md:max-w-[396px] lg:max-w-full transition duration-300"
                   placeholder="Enter name"
                   type="text"
                   onChange={handleChange}
                 />
+                {formErrors.senderNumber && (
+                  <div className="text-red-500">{formErrors.senderNumber}</div>
+                )}
               </div>
             </div>
 
@@ -157,23 +283,29 @@ const ShippingDetails = () => {
               <div className="w-full">
                 <div className="text-12">Receiver&apos;s name</div>
                 <input
-                  name="Receiver's name"
+                  name="receiverName"
                   className="text-14 work-sans-500 bg-accent-grey bg-opacity-10 placeholder:text-accent-grey border-b-[1px] border-accent-grey focus:border-none focus:outline px-2 py-[6px] w-full max-w-[396px] transition duration-300"
                   placeholder="Enter name"
                   type="text"
                   onChange={handleChange}
                 />
+                {formErrors.receiverName && (
+                  <div className="text-red-500">{formErrors.receiverName}</div>
+                )}
               </div>
 
               <div className="w-full">
                 <div className="text-12">Receiver&apos;s email</div>
                 <input
-                  name="Receiver's email"
+                  name="receiverEmail"
                   className="text-14 work-sans-500 bg-accent-grey bg-opacity-10 placeholder:text-accent-grey border-b-[1px] border-accent-grey focus:border-none focus:outline px-2 py-[6px] w-full max-w-[396px] transition duration-300"
                   placeholder="you@yours.com"
                   type="email"
                   onChange={handleChange}
                 />
+                {formErrors.receiverEmail && (
+                  <div className="text-red-500">{formErrors.receiverEmail}</div>
+                )}
               </div>
             </div>
 
@@ -181,23 +313,31 @@ const ShippingDetails = () => {
               <div className="w-full">
                 <div className="text-12">Receiver&apos;s number</div>
                 <input
-                  name="Receiver's number"
+                  name="receiverNumber"
                   className="text-14 work-sans-500 bg-accent-grey bg-opacity-10 placeholder:text-accent-grey border-b-[1px] border-accent-grey focus:border-none focus:outline px-2 py-[6px] w-full max-w-[396px] transition duration-300"
                   placeholder="1234567890"
                   type="number"
                   onChange={handleChange}
                 />
+                {formErrors.receiverNumber && (
+                  <div className="text-red-500">
+                    {formErrors.receiverNumber}
+                  </div>
+                )}
               </div>
 
               <div className="w-full">
                 <div className="text-12">Address line 1</div>
                 <input
-                  name="Address line 1"
+                  name="addressLine1"
                   className="text-14 work-sans-500 bg-accent-grey bg-opacity-10 placeholder:text-accent-grey border-b-[1px] border-accent-grey focus:border-none focus:outline px-2 py-[6px] w-full max-w-[396px] transition duration-300"
                   placeholder="Enter details"
                   type="text"
                   onChange={handleChange}
                 />
+                {formErrors.addressLine1 && (
+                  <div className="text-red-500">{formErrors.addressLine1}</div>
+                )}
               </div>
             </div>
 
@@ -205,23 +345,29 @@ const ShippingDetails = () => {
               <div className="w-full">
                 <div className="text-12">Address line 2</div>
                 <input
-                  name="Address line 2"
+                  name="addressLine2"
                   className="text-14 work-sans-500 bg-accent-grey bg-opacity-10 placeholder:text-accent-grey border-b-[1px] border-accent-grey focus:border-none focus:outline px-2 py-[6px] w-full max-w-[396px] transition duration-300"
                   placeholder="Enter details"
                   type="text"
                   onChange={handleChange}
                 />
+                {formErrors.addressLine2 && (
+                  <div className="text-red-500">{formErrors.addressLine2}</div>
+                )}
               </div>
 
               <div className="w-full">
                 <div className="text-12">Landmark</div>
                 <input
-                  name="Landmark"
+                  name="landmark"
                   className="text-14 work-sans-500 bg-accent-grey bg-opacity-10 placeholder:text-accent-grey border-b-[1px] border-accent-grey focus:border-none focus:outline px-2 py-[6px] w-full max-w-[396px] transition duration-300"
                   placeholder="Enter details"
                   type="text"
                   onChange={handleChange}
                 />
+                {formErrors.landmark && (
+                  <div className="text-red-500">{formErrors.landmark}</div>
+                )}
               </div>
             </div>
 
@@ -245,20 +391,26 @@ const ShippingDetails = () => {
                     <option value={el.isoCode}>{el.name}</option>
                   ))}
                 </select>
+                {formErrors.country && (
+                  <div className="text-red-500">{formErrors.country}</div>
+                )}
               </div>
 
               <div className="w-full">
                 <div className="text-12">Zip code</div>
                 <input
-                  name="Zip code"
+                  name="zipCode"
                   className="text-14 work-sans-500 bg-accent-grey bg-opacity-10 placeholder:text-accent-grey border-b-[1px] border-accent-grey focus:border-none focus:outline px-2 py-[6px] w-full max-w-[396px] transition duration-300"
                   placeholder="Enter details"
                   type="text"
                   onChange={handleChange}
                 />
+                {formErrors.zipCode && (
+                  <div className="text-red-500">{formErrors.zipCode}</div>
+                )}
               </div>
 
-              <div className="w-full hidden">
+              {/* <div className="w-full hidden">
                 <div className="text-12">State</div>
                 <select
                   className="text-14 work-sans-500 bg-accent-grey bg-opacity-10 placeholder:text-accent-grey border-b-[1px] border-accent-grey focus:border-none focus:outline px-2 py-[6px] w-full sm:max-w-[396px] md:max-w-full transition duration-300"
@@ -271,10 +423,13 @@ const ShippingDetails = () => {
                     <option>{el.name}</option>
                   ))}
                 </select>
-              </div>
+                {formErrors.state && (
+                  <div className="text-red-500">{formErrors.state}</div>
+                )}
+              </div> */}
             </div>
 
-            <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-3 mt-6 lg:min-w-[445px] hidden">
+            {/* <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-3 mt-6 lg:min-w-[445px] hidden">
               <div className="w-full">
                 <div className="text-12">City</div>
                 <select
@@ -288,6 +443,9 @@ const ShippingDetails = () => {
                     <option>{el.name}</option>
                   ))}
                 </select>
+                {formErrors.city && (
+                  <div className="text-red-500">{formErrors.city}</div>
+                )}
               </div>
 
               <div className="w-full">
@@ -300,13 +458,13 @@ const ShippingDetails = () => {
                   onChange={handleChange}
                 />
               </div>
-            </div>
+            </div> */}
 
             <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-3 mt-6 lg:min-w-[445px]">
               <div className="w-full">
                 <div className="text-12">Type of Delivery</div>
                 <select
-                  name="Type of Delivery"
+                  name="deliveryType"
                   className="text-14 work-sans-500 bg-accent-grey bg-opacity-10 placeholder:text-accent-grey border-b-[1px] border-accent-grey focus:border-none focus:outline px-2 py-[6px] w-full sm:max-w-[396px] md:max-w-full transition duration-300"
                   placeholder="Enter details"
                   type="text"
@@ -317,6 +475,9 @@ const ShippingDetails = () => {
                   <option>Store</option>
                   <option>Hospital</option>
                 </select>
+                {formErrors.deliveryType && (
+                  <div className="text-red-500">{formErrors.deliveryType}</div>
+                )}
               </div>
             </div>
 
