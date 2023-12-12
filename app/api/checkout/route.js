@@ -141,6 +141,8 @@ export const POST = async (request) => {
     mode: "payment",
     success_url: "http://localhost:3000/success",
     cancel_url: "http://localhost:3000/cancel",
+    customer_email: paymentIntentData.metadata.senderEmail,
+    ...paymentIntentData,
   });
 
   // Return the session URL in the response
