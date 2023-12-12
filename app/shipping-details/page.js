@@ -384,6 +384,7 @@ const ShippingDetails = () => {
                   className="text-14 work-sans-500 bg-accent-grey bg-opacity-10 placeholder:text-accent-grey border-b-[1px] border-accent-grey focus:border-none focus:outline px-2 py-[6px] w-full sm:max-w-[396px] md:max-w-full transition duration-300"
                   placeholder="Select country"
                   name="country"
+                  value={formData.country}
                   onChange={handleChange}
                 >
                   <option disabled={true}>Select country</option>
