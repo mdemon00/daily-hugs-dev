@@ -75,7 +75,7 @@ const PairWithCard = () => {
       <div className="hidden md:block mt-[10px] text-18 work-sans-500 text-center">
         Hover over the Card product Image to pair with your Bouquet.
       </div>
-      <div className="w-full md:w-fit mx-auto">
+      {/* <div className="w-full md:w-fit mx-auto">
         <div className="text-24 inter-400 mt-5">Filter by occasion</div>
 
         <select className="block md:hidden px-3 py-2 border border-accent-purple mt-4">
@@ -105,7 +105,7 @@ const PairWithCard = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-5 md:gap-[40px] lg:gap-[60px] w-fit mx-auto mt-[30px]">
         {cardsImage.map((card, idx) => {
