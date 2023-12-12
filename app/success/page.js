@@ -1,6 +1,5 @@
 "use client";
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Box, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 
@@ -10,6 +9,7 @@ const Success = () => {
   const token = localStorage.getItem("token"); // Replace with your actual storage key
   const userEmail = localStorage.getItem("email");
   const [placeOrderExecuted, setPlaceOrderExecuted] = useState(false);
+  const initialRender = useRef(true);
 
   // Function to place an order
   const placeOrder = async () => {
@@ -24,18 +24,18 @@ const Success = () => {
     if (checkoutResponse) {
       const orderData = {
         user: {
-          name: checkoutResponse.formData["Sender's name"],
+          name: checkoutResponse.formData["senderName"],
           email: userEmail,
         },
         billingAddress: {
-          name: checkoutResponse.formData["Sender's name"],
-          email: checkoutResponse.formData["Sender's email"],
-          district: checkoutResponse.formData["Address line 1"],
-          postCode: checkoutResponse.formData["Zip code"],
+          name: checkoutResponse.formData["senderName"],
+          email: checkoutResponse.formData["senderEmail"],
+          district: checkoutResponse.formData["senderNumber"],
+          postCode: checkoutResponse.formData["zipCode"],
           // Add any other required fields
         },
         shippingMethod: "Express", // Replace with the actual shipping method if available in checkoutResponse
-        paymentMethod: "Credit Card", // Replace with the actual payment method if available in checkoutResponse
+        paymentMethod: "Stripe", // Replace with the actual payment method if available in checkoutResponse
         items: checkoutResponse.cart.map((item) => ({
           productId: item.id,
           name: item.title,
@@ -85,11 +85,13 @@ const Success = () => {
 
   useEffect(() => {
     // Check if placeOrder has already been executed
-    if (!placeOrderExecuted) {
-      // Call the function inside the useEffect
+    if (initialRender.current) {
+      // On initial render, do nothing
+      initialRender.current = false;
+    } else {
+      // Subsequent renders, call the function inside the useEffect
       placeOrder();
-      // Set the flag to true to prevent future executions
-      setPlaceOrderExecuted(true);
+      localStorage.removeItem("checkoutResponse");
     }
     const redirectTimer = setInterval(() => {
       setCountdown((prevCountdown) => {
