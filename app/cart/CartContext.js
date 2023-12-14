@@ -6,6 +6,7 @@ const CartContext = createContext();
 const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [freshnessProtection, setFreshnessProtection] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const addToCart = (product) => {
     const existingProductIndex = cart.findIndex(
@@ -83,6 +84,8 @@ const CartProvider = ({ children }) => {
         resetCart,
         freshnessProtection,
         setFreshnessProtection,
+        isLoading,
+        setIsLoading,
       }}
     >
       {children}

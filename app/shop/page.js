@@ -13,6 +13,7 @@ import PriceIncludesCard from "@/components/Icons/Common/PriceIncludesCard";
 import ShopBenefitsCard from "@/components/Icons/Common/ShopBenefitsCard";
 import { useAuth } from "context/AuthContext";
 import { useCart } from "app/cart/CartContext";
+import Loader from "/components/Loader";
 
 const productData = {
   id: "1234134",
@@ -70,7 +71,7 @@ const benefitsAgainstPrice = [
 
 const Shop = () => {
   const { setProduct } = useAuth();
-  const { resetCart } = useCart();
+  const { resetCart, isLoading } = useCart();
 
   const sampleProduct = {
     image: "/RomanceDose/Dose_1.png",
@@ -237,6 +238,7 @@ const Shop = () => {
           <PriceIncludesCard title={el} key={idx} />
         ))}
       </div>
+      <Loader isLoading={isLoading} />
     </div>
   );
 };

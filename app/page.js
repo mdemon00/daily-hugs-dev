@@ -1,3 +1,5 @@
+"use client";
+
 import BrandAmbassador from "@/components/Sections/BrandAmbassador";
 import CustomerReviews from "@/components/Sections/CustomerReviews";
 import DailyDoseOfRomance from "@/components/Sections/DailyDoseOfRomance";
@@ -6,8 +8,24 @@ import OurBouquet from "@/components/Sections/OurBouquet";
 import RespectEarth from "@/components/Sections/RespectEarth";
 import SendSteps from "@/components/Sections/SendSteps";
 import TikTok from "@/components/Sections/TikTok";
+import SubscriptionPopup from "/components/SubscriptionPopup";
+import React, { useState, useEffect } from "react";
 
 export default function Home() {
+  const [isSubscriptionOpen, setIsSubscriptionOpen] = useState(true);
+
+  const handleCloseSubscription = () => {
+    setIsSubscriptionOpen(false);
+  };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setIsSubscriptionOpen(false);
+    }, 10000); // Close after 5 seconds (adjust the time as needed)
+
+    return () => clearTimeout(timeoutId);
+  }, [isSubscriptionOpen]);
+
   return (
     <main className="flex min-h-screen flex-col">
       {/* <Image
@@ -27,6 +45,10 @@ export default function Home() {
       <BrandAmbassador />
       <DailyDoseOfRomance />
       <TikTok />
+      <SubscriptionPopup
+        isOpen={isSubscriptionOpen}
+        onClose={handleCloseSubscription}
+      />
     </main>
   );
 }

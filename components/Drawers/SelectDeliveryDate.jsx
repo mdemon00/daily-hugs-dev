@@ -30,9 +30,13 @@ const SelectDeliveryDate = () => {
   const {
 
     addToCart,
-
+    setIsLoading
   } = useCart();
 
+
+  const handleLoader = (value) => {
+    setIsLoading(value);
+  };
 
   const handleClose = () => {
     setSelectDeliveryDate({ ...selectDeliveryDate, isOpen: false });
@@ -43,6 +47,7 @@ const SelectDeliveryDate = () => {
     let updatedProductPayload = productPayload.info.dueDate ? productPayload.info.dueDate : new Date()
     setProduct(updatedProductPayload);
     addToCart(productPayload);
+    handleLoader(true);
     setCartDrawerModal({ isOpen: true, data: {} });
   };
 

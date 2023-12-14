@@ -53,7 +53,7 @@ const CartView = () => {
                         onClick={() => {
                           decrementQuantity(el.id);
                         }}
-                        disabled={el.numOfBoxes === 1}
+                        disabled={el.numOfBoxes === 1 || freshnessProtection}
                         className="disabled:opacity-20 border-[1px] border-black h-[16px] w-[16px] flex items-center justify-center rounded-full"
                       >
                         -
@@ -65,7 +65,8 @@ const CartView = () => {
                         onClick={() => {
                           incrementQuantity(el.id);
                         }}
-                        className="border-[1px] border-black h-[16px] w-[16px] flex items-center justify-center rounded-full"
+                        disabled={freshnessProtection}
+                        className="disabled:opacity-20 border-[1px] border-black h-[16px] w-[16px] flex items-center justify-center rounded-full"
                       >
                         +
                       </button>

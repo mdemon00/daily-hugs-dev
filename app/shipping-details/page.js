@@ -5,6 +5,7 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { Country, State, City } from "country-state-city";
 import { useCart } from "app/cart/CartContext";
+import Loader from "/components/Loader";
 
 const ShippingDetails = () => {
   const { cart, freshnessProtection } = useCart();
@@ -20,6 +21,7 @@ const ShippingDetails = () => {
     country: "NL",
     zipCode: "",
     deliveryType: "House",
+    subscribed: false,
   });
   const [formErrors, setFormErrors] = useState({});
 
@@ -40,6 +42,7 @@ const ShippingDetails = () => {
   const allCountries = Country.getAllCountries();
   const [allStatesOfCountry, setAllStatesOfCountry] = useState([]);
   const [allCitiesOfState, setAllCitiesOfState] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateForm = () => {
     const errors = {};
@@ -178,6 +181,8 @@ const ShippingDetails = () => {
       return;
     }
 
+    setIsLoading(true);
+
     await fetch("http://localhost:3000/api/checkout", {
       method: "POST",
       headers: {
@@ -193,6 +198,8 @@ const ShippingDetails = () => {
         return response.json();
       })
       .then((response) => {
+        setIsLoading(false);
+
         if (response.url) {
           const checkoutResponseData = {
             cart: cart,
@@ -210,6 +217,13 @@ const ShippingDetails = () => {
       });
 
     console.log(cart);
+  };
+
+  const handleSubscriptionChange = (e) => {
+    setFormData({
+      ...formData,
+      subscribed: e.target.checked,
+    });
   };
 
   useEffect(() => {
@@ -252,6 +266,19 @@ const ShippingDetails = () => {
                 {formErrors.senderEmail && (
                   <div className="text-red-500">{formErrors.senderEmail}</div>
                 )}
+              </div>
+
+              <div className="mt-3 flex items-center">
+                <input
+                  type="checkbox"
+                  id="subscribeCheckbox"
+                  name="subscribeCheckbox"
+                  checked={formData.subscribed}
+                  onChange={handleSubscriptionChange}
+                />
+                <label htmlFor="subscribeCheckbox" className="ml-2 text-12">
+                  Email me with news and offers
+                </label>
               </div>
             </div>
 
@@ -481,6 +508,7 @@ const ShippingDetails = () => {
           </div>
         </div>
       </div>
+      <Loader isLoading={isLoading} />
     </div>
   );
 };
