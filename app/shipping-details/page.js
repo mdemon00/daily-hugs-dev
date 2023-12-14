@@ -17,7 +17,6 @@ const ShippingDetails = () => {
     receiverNumber: "",
     addressLine1: "",
     addressLine2: "",
-    landmark: "",
     country: "NL",
     zipCode: "",
     deliveryType: "House",
@@ -99,11 +98,6 @@ const ShippingDetails = () => {
     // Address Line 2
     if (!formData.addressLine2.trim()) {
       errors.addressLine2 = "Address line 2 is required";
-    }
-
-    // Landmark
-    if (!formData.landmark.trim()) {
-      errors.landmark = "Landmark is required";
     }
 
     // Country
@@ -267,7 +261,7 @@ const ShippingDetails = () => {
                 <input
                   name="senderNumber"
                   className="text-14 work-sans-500 bg-accent-grey bg-opacity-10 placeholder:text-accent-grey border-b-[1px] border-accent-grey focus:border-none focus:outline px-2 py-[6px] w-full md:max-w-[396px] lg:max-w-full transition duration-300"
-                  placeholder="Enter name"
+                  placeholder="Enter number"
                   type="text"
                   onChange={handleChange}
                 />
@@ -355,20 +349,6 @@ const ShippingDetails = () => {
                   <div className="text-red-500">{formErrors.addressLine2}</div>
                 )}
               </div>
-
-              <div className="w-full">
-                <div className="text-12">Landmark</div>
-                <input
-                  name="landmark"
-                  className="text-14 work-sans-500 bg-accent-grey bg-opacity-10 placeholder:text-accent-grey border-b-[1px] border-accent-grey focus:border-none focus:outline px-2 py-[6px] w-full max-w-[396px] transition duration-300"
-                  placeholder="Enter details"
-                  type="text"
-                  onChange={handleChange}
-                />
-                {formErrors.landmark && (
-                  <div className="text-red-500">{formErrors.landmark}</div>
-                )}
-              </div>
             </div>
 
             <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-3 mt-6 lg:min-w-[445px]">
@@ -386,6 +366,7 @@ const ShippingDetails = () => {
                   name="country"
                   value={formData.country}
                   onChange={handleChange}
+                  disabled
                 >
                   <option disabled={true}>Select country</option>
                   {allCountries?.map((el, idx) => (
