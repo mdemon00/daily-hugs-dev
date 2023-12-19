@@ -102,10 +102,10 @@ const Shop = () => {
     setSelectedVariantIndex(variantIndex);
   };
 
-  const handleDueDateChange = (event) => {
-    const selectedDate = event.target.value;
-    setSelectedDueDate(selectedDate);
-  };
+  // const handleDueDateChange = (event) => {
+  //   const selectedDate = event.target.value;
+  //   setSelectedDueDate(selectedDate);
+  // };
 
   return (
     <div>
@@ -174,7 +174,7 @@ const Shop = () => {
               );
             })}
           </div>
-
+          {/* 
           <div className="hidden lg:block inter-700 text-14 my-4">Due date</div>
           <div>
             <input
@@ -192,7 +192,7 @@ const Shop = () => {
               />
               <span>30-DAY SATISFACTION GUARANTEE</span>
             </div>
-          </div>
+          </div> */}
 
           <div className="mt-[18px]">
             <ThemeButton
@@ -201,9 +201,11 @@ const Shop = () => {
                 // temporary intialize the cart to empty
                 resetCart();
 
-                sampleProduct.info.dueDate = selectedDueDate
-                  ? selectedDueDate
-                  : new Date();
+                // sampleProduct.info.dueDate = selectedDueDate
+                //   ? selectedDueDate
+                //   : new Date();
+
+                // sampleProduct.info.dueDate = new Date();
                 const selectedVariant =
                   productData.variants[selectedVariantIndex];
                 sampleProduct.info.variant = selectedVariant.legendText;
