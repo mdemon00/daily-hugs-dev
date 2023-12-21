@@ -21,7 +21,7 @@ export default function Home() {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setIsSubscriptionOpen(false);
-    }, 10000); // Close after 5 seconds (adjust the time as needed)
+    }, 60000); // Close after 30 seconds (adjust the time as needed)
 
     return () => clearTimeout(timeoutId);
   }, [isSubscriptionOpen]);
