@@ -10,6 +10,7 @@ import {
   Input,
   Button,
   Text,
+  Badge,
 } from "@chakra-ui/react";
 
 const SubscriptionPopup = ({ isOpen, onClose }) => {
@@ -108,7 +109,8 @@ const SubscriptionPopup = ({ isOpen, onClose }) => {
           )}
           {couponCode && (
             <Text mt={4} color="green.500" fontWeight="bold">
-              Your 10% discount coupon code: {couponCode}
+              Your 10% discount coupon code:{" "}
+              <Badge colorScheme="blue">{couponCode}</Badge>
             </Text>
           )}
         </ModalBody>

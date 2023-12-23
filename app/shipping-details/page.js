@@ -183,7 +183,7 @@ const ShippingDetails = () => {
 
     setIsLoading(true);
 
-    await fetch("http://localhost:3000/api/checkout", {
+    await fetch("/api/checkout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
