@@ -16,8 +16,10 @@ const Account = () => {
       const token = localStorage.getItem("token");
       const userEmail = localStorage.getItem("email");
 
+      const apiUrl = process.env.API_URL || "http://localhost:9000";
+
       const response = await fetch(
-        `http://localhost:9000/api/orders/?email=${userEmail}&sort=createdAt&limit=50&skip=0`,
+        `${apiUrl}/api/orders/?email=${userEmail}&sort=createdAt&limit=50&skip=0`,
         {
           method: "GET",
           headers: {

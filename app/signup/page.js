@@ -27,11 +27,10 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
+      const apiUrl = process.env.API_URL || "http://localhost:9000";
+
       // Make a request to your signup API
-      const response = await axios.post(
-        "http://localhost:9000/api/register",
-        formData
-      );
+      const response = await axios.post(`${apiUrl}/api/register`, formData);
       // Handle the response as needed
       console.log("Signup successful", response.data);
 

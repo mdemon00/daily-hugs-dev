@@ -67,18 +67,17 @@ const Success = () => {
             // Now, orderData contains the dynamic values from localStorage.checkoutResponse
             console.log(orderData);
 
-            const response = await fetch(
-              "http://localhost:9000/api/orders/create",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `${token}`, // Attach the token in the Authorization header
-                  // Add any other headers as needed
-                },
-                body: JSON.stringify(orderData),
-              }
-            );
+            const apiUrl = process.env.API_URL || "http://localhost:9000";
+
+            const response = await fetch(`${apiUrl}/api/orders/create`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `${token}`, // Attach the token in the Authorization header
+                // Add any other headers as needed
+              },
+              body: JSON.stringify(orderData),
+            });
 
             const data = await response.json();
             console.log("Order placed successfully:", data);

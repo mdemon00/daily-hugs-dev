@@ -25,10 +25,9 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:9000/api/login",
-        formData
-      );
+      const apiUrl = process.env.API_URL || "http://localhost:9000";
+
+      const response = await axios.post(`${apiUrl}/api/login`, formData);
 
       const { token, email } = response.data;
 
