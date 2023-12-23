@@ -7,6 +7,7 @@ const Success = () => {
   const router = useRouter();
   const [countdown, setCountdown] = useState(5);
   const [placeOrderExecuted, setPlaceOrderExecuted] = useState(false);
+  const [checkoutRes, setcheckoutRes] = useState(false);
   const initialRender = useRef(true);
 
   useEffect(() => {
@@ -21,6 +22,8 @@ const Success = () => {
           const checkoutResponse = JSON.parse(
             localStorage.getItem("checkoutResponse")
           );
+
+          if (checkoutResponse) setcheckoutRes(true);
 
           // Check if token is available
           if (!token) {
@@ -119,7 +122,7 @@ const Success = () => {
       color="white" // Use your desired text color
     >
       <Heading textAlign="center" mb={4}>
-        {placeOrderExecuted ? "Order Completed" : "Checking..."}
+        {checkoutRes ? "Order Completed" : "Checking..."}
       </Heading>
       <p style={{ marginTop: "-0.5rem" }}>
         Redirecting in {countdown} seconds...
