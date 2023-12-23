@@ -9,12 +9,13 @@ import OrderList from "./orderList";
 const Account = () => {
   const router = useRouter();
   const [orders, setOrders] = useState([]);
-  const token = localStorage.getItem("token");
-  const userEmail = localStorage.getItem("email");
 
   // Function to retrieve all orders
   const getAllOrders = async () => {
     try {
+      const token = localStorage.getItem("token");
+      const userEmail = localStorage.getItem("email");
+
       const response = await fetch(
         `http://localhost:9000/api/orders/?email=${userEmail}&sort=createdAt&limit=50&skip=0`,
         {
@@ -35,25 +36,27 @@ const Account = () => {
   };
 
   useEffect(() => {
-    // Check if the localStorage object is available (in a browser environment)
-    const fetchOrders = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          // Redirect to login page if not authenticated
-          router.replace("/login");
-          return;
+    // Check if running in a browser environment before using localStorage
+    if (typeof window !== "undefined") {
+      const fetchOrders = async () => {
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            // Redirect to login page if not authenticated
+            router.replace("/login");
+            return;
+          }
+
+          const data = await getAllOrders();
+          setOrders(data);
+        } catch (error) {
+          console.error("Error fetching orders:", error);
+          // Handle error, you might want to set some default value or show an error message
         }
+      };
 
-        const data = await getAllOrders();
-        setOrders(data);
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-        // Handle error, you might want to set some default value or show an error message
-      }
-    };
-
-    fetchOrders();
+      fetchOrders();
+    }
   }, []);
 
   // If not authenticated, do not render the account

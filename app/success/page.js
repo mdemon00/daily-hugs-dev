@@ -6,93 +6,100 @@ import { useRouter } from "next/navigation";
 const Success = () => {
   const router = useRouter();
   const [countdown, setCountdown] = useState(5);
-  const token = localStorage.getItem("token"); // Replace with your actual storage key
-  const userEmail = localStorage.getItem("email");
   const [placeOrderExecuted, setPlaceOrderExecuted] = useState(false);
   const initialRender = useRef(true);
 
-  // Function to place an order
-  const placeOrder = async () => {
-    // Assuming you have the JWT token stored somewhere, retrieve it
-
-    // Get the checkout response from localStorage
-    const checkoutResponse = JSON.parse(
-      localStorage.getItem("checkoutResponse")
-    );
-
-    // Check if checkoutResponse is available and not null
-    if (checkoutResponse) {
-      const orderData = {
-        user: {
-          name: checkoutResponse.formData["senderName"],
-          email: userEmail,
-        },
-        billingAddress: {
-          name: checkoutResponse.formData["senderName"],
-          email: checkoutResponse.formData["senderEmail"],
-          district: checkoutResponse.formData["senderNumber"],
-          postCode: checkoutResponse.formData["zipCode"],
-          // Add any other required fields
-        },
-        shippingMethod: "Express", // Replace with the actual shipping method if available in checkoutResponse
-        paymentMethod: "Stripe", // Replace with the actual payment method if available in checkoutResponse
-        items: checkoutResponse.cart.map((item) => ({
-          productId: item.id,
-          name: item.title,
-          price: item.discountedPrice,
-          qty: item.numOfBoxes,
-        })),
-      };
-
-      // Add Freshness Protection product if freshnessProtection is true
-      if (checkoutResponse.freshnessProtection) {
-        const freshnessProtectionProduct = {
-          productId: "vfdgdlkj",
-          name: "Freshness Protection",
-          price: 4.99,
-          qty: 1,
-        };
-
-        orderData.items.push(freshnessProtectionProduct);
-      }
-
-      // Now, orderData contains the dynamic values from localStorage.checkoutResponse
-      console.log(orderData);
-
+  useEffect(() => {
+    // Function to place an order
+    const placeOrder = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:9000/api/orders/create",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `${token}`, // Attach the token in the Authorization header
-              // Add any other headers as needed
-            },
-            body: JSON.stringify(orderData),
-          }
-        );
+        // Check if placeOrder has already been executed
+        if (!placeOrderExecuted) {
+          // Get necessary data from localStorage
+          const token = localStorage.getItem("token");
+          const userEmail = localStorage.getItem("email");
+          const checkoutResponse = JSON.parse(
+            localStorage.getItem("checkoutResponse")
+          );
 
-        const data = await response.json();
-        console.log("Order placed successfully:", data);
+          // Check if token is available
+          if (!token) {
+            console.error("No token found in localStorage");
+            return;
+          }
+
+          // Check if checkoutResponse is available and not null
+          if (checkoutResponse) {
+            const orderData = {
+              user: {
+                name: checkoutResponse.formData["senderName"],
+                email: userEmail,
+              },
+              billingAddress: {
+                name: checkoutResponse.formData["senderName"],
+                email: checkoutResponse.formData["senderEmail"],
+                district: checkoutResponse.formData["senderNumber"],
+                postCode: checkoutResponse.formData["zipCode"],
+                // Add any other required fields
+              },
+              shippingMethod: "Express", // Replace with the actual shipping method if available in checkoutResponse
+              paymentMethod: "Stripe", // Replace with the actual payment method if available in checkoutResponse
+              items: checkoutResponse.cart.map((item) => ({
+                productId: item.id,
+                name: item.title,
+                price: item.discountedPrice,
+                qty: item.numOfBoxes,
+              })),
+            };
+
+            // Add Freshness Protection product if freshnessProtection is true
+            if (checkoutResponse.freshnessProtection) {
+              const freshnessProtectionProduct = {
+                productId: "vfdgdlkj",
+                name: "Freshness Protection",
+                price: 4.99,
+                qty: 1,
+              };
+
+              orderData.items.push(freshnessProtectionProduct);
+            }
+
+            // Now, orderData contains the dynamic values from localStorage.checkoutResponse
+            console.log(orderData);
+
+            const response = await fetch(
+              "http://localhost:9000/api/orders/create",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `${token}`, // Attach the token in the Authorization header
+                  // Add any other headers as needed
+                },
+                body: JSON.stringify(orderData),
+              }
+            );
+
+            const data = await response.json();
+            console.log("Order placed successfully:", data);
+
+            // Mark placeOrder as executed to avoid redundant calls
+            setPlaceOrderExecuted(true);
+          } else {
+            console.error("No checkout response data found in localStorage");
+          }
+        }
       } catch (error) {
         console.error("Error placing order:", error);
       }
-    } else {
-      console.error("No checkout response data found in localStorage");
-    }
-  };
+    };
 
-  useEffect(() => {
-    // Check if placeOrder has already been executed
-    if (initialRender.current) {
-      // On initial render, do nothing
-      initialRender.current = false;
-    } else {
-      // Subsequent renders, call the function inside the useEffect
+    // Check if running in a browser environment before using localStorage
+    if (typeof window !== "undefined") {
       placeOrder();
       localStorage.removeItem("checkoutResponse");
     }
+
     const redirectTimer = setInterval(() => {
       setCountdown((prevCountdown) => {
         if (prevCountdown === 1) {
@@ -104,7 +111,7 @@ const Success = () => {
     }, 1000);
 
     return () => clearInterval(redirectTimer);
-  }, []);
+  }, [placeOrderExecuted]);
 
   return (
     <Box
@@ -113,7 +120,7 @@ const Success = () => {
       color="white" // Use your desired text color
     >
       <Heading textAlign="center" mb={4}>
-        Order Completed
+        {placeOrderExecuted ? "Order Completed" : "Checking..."}
       </Heading>
       <p style={{ marginTop: "-0.5rem" }}>
         Redirecting in {countdown} seconds...
