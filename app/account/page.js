@@ -18,7 +18,7 @@ const Account = () => {
 
       const apiUrl =
         process.env.NEXT_PUBLIC_API_URL ||
-        "https://796cn194c5.execute-api.eu-north-1.amazonaws.com/default/myFirstFunction";
+        "https://d6l3uzhdiv2ze4dep5rse2qiye0jmcat.lambda-url.eu-north-1.on.aws";
 
       const response = await fetch(
         `${apiUrl}/api/orders/?email=${userEmail}&sort=createdAt&limit=50&skip=0`,
