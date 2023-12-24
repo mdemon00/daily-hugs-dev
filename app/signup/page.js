@@ -27,7 +27,9 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
-      const apiUrl = process.env.API_URL || "http://localhost:9000";
+      const apiUrl =
+        process.env.NEXT_PUBLIC_API_URL ||
+        "https://796cn194c5.execute-api.eu-north-1.amazonaws.com/default/myFirstFunction";
 
       // Make a request to your signup API
       const response = await axios.post(`${apiUrl}/api/register`, formData);

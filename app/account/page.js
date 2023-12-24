@@ -16,7 +16,9 @@ const Account = () => {
       const token = localStorage.getItem("token");
       const userEmail = localStorage.getItem("email");
 
-      const apiUrl = process.env.API_URL || "http://localhost:9000";
+      const apiUrl =
+        process.env.NEXT_PUBLIC_API_URL ||
+        "https://796cn194c5.execute-api.eu-north-1.amazonaws.com/default/myFirstFunction";
 
       const response = await fetch(
         `${apiUrl}/api/orders/?email=${userEmail}&sort=createdAt&limit=50&skip=0`,

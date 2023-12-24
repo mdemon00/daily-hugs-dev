@@ -25,7 +25,9 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const apiUrl = process.env.API_URL || "http://localhost:9000";
+      const apiUrl =
+        process.env.NEXT_PUBLIC_API_URL ||
+        "https://796cn194c5.execute-api.eu-north-1.amazonaws.com/default/myFirstFunction";
 
       const response = await axios.post(`${apiUrl}/api/login`, formData);
 
