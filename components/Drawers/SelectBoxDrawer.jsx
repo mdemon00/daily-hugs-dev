@@ -67,7 +67,7 @@ const SelectBoxDrawer = () => {
             <SelectBox />
           </DrawerBody>
 
-          <DrawerFooter className="bg-accent-lightPurple bg-opacity-60 rounded-t-[8px] border-t-[2px] border-accent-purple">
+          <DrawerFooter className="bg-accent-lightPurple rounded-t-[8px] border-t-[2px] border-accent-purple">
             <div className="flex flex-col w-full gap-3">
               <ThemeButton
                 title={"Pair with a card"}
