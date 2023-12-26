@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import BouquetImage from "../../public/Bouquet.png";
 import ThemeButton from "../common/ThemeButton";
+import { useRouter } from "next/navigation";
 
 const ListData = [
   { title: "Free selection of 50+ cards" },
@@ -27,6 +28,10 @@ const ListPoints = ({ title }) => {
 };
 
 const OurBouquet = () => {
+  const router = useRouter();
+  const handleNextStep = () => {
+    router.push("/shop");
+  };
   return (
     <div className="flex flex-col lg:flex-row">
       <div className="p-5 lg:px-[81px] md:py-[80px]">
@@ -57,7 +62,7 @@ const OurBouquet = () => {
           </ul>
         </div>
         <div className="mx-auto w-full max-w-[391px] mt-[50px] mb-[44px] lg:mb-[80px] md:mt-[60px]">
-          <ThemeButton title={"SEND A BOUQUET"} />
+          <ThemeButton title={"SEND A BOUQUET"} onClick={handleNextStep} />
         </div>
       </div>
     </div>

@@ -1,8 +1,16 @@
 import Image from "next/image";
 import React from "react";
 import ThemeButton from "../common/ThemeButton";
+import { useRouter } from "next/navigation";
 
 const BrandAmbassador = () => {
+
+  const router = useRouter();
+
+  const handleNextStep = () => {
+    router.push("/shop");
+  };
+  
   return (
     <div className="flex flex-col lg:flex-row-reverse justify-center pb-[40px] lg:pb-0">
       <div className="h-fit w-full max-w-[1000px]">
@@ -41,7 +49,7 @@ const BrandAmbassador = () => {
             Ready to make a difference?
           </div>
           <div className="my-5">
-            <ThemeButton title={"LEARN MORE"} />
+            <ThemeButton title={"LEARN MORE"} onClick={handleNextStep} />
           </div>
         </div>
       </div>

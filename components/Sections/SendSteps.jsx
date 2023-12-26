@@ -4,6 +4,7 @@ import Mail from "../Icons/Steps/Mail";
 import Heart from "../Icons/Steps/Heart";
 import Delivery from "../Icons/Steps/Delivery";
 import ThemeButton from "../common/ThemeButton";
+import { useRouter } from "next/navigation";
 
 const stepsToPurchaseArray = [
   {
@@ -48,6 +49,13 @@ const stepsToPurchaseArray = [
 ];
 
 const SendSteps = () => {
+
+const router = useRouter();
+
+const handleNextStep = () => {
+  router.push("/shop");
+};
+
   return (
     <div className="p-[30px] pb-[40px] md:py-[90px] md:px-[90px]">
       <div className="text-28 md:text-50 text-center work-sans-400 mb-[30px] md:mb-[80px]">
@@ -65,7 +73,7 @@ const SendSteps = () => {
         ))}
       </div>
       <div className="mx-auto w-full max-w-[396px]">
-        <ThemeButton title={"SEND A BOUQUET"} />
+        <ThemeButton title={"SEND A BOUQUET"} onClick={handleNextStep}/>
       </div>
     </div>
   );
